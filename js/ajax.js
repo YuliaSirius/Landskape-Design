@@ -2,11 +2,12 @@
 import { drawnObjects } from './landscape.js';
 import { addImage } from './landscape.js';
 import { reDraw } from './landscape.js';
-// import { drawPlot } from './landscape.js';
+import { drawPath } from './leftButtons.js';
 import { plot } from './plotsSizes.js';
 import { currentUser } from './topButtons.js';
-import { pathWays } from './leftButtons.js';
-// import { drawPathWays } from './landscape.js';
+import { ways } from './leftButtons.js';
+import { cnt } from './landscape.js';
+
 let ajaxHandlerScript = 'https://fe.it-academy.by/AjaxStringStorage2.php';
 let updatePassword;
 
@@ -62,7 +63,6 @@ let stringName = 'MIASNIKOVA_LANDSKAPE_OBJECTS';
 
 // ///////////////////////////////////////////
 
-
 let savedObjects;
 let savedLast;
 let allUsers = [];
@@ -90,8 +90,7 @@ function lockGetReady(callresult) {
       data: { f: 'READ', n: stringName },
       success: read,
       error: errorHandler,
-}
-);
+    });
 
     function read() {
       if (callresult.error != undefined) alert(callresult.error);
@@ -104,7 +103,7 @@ function lockGetReady(callresult) {
       let i = 1;
       let info = { pl: {} };
       info.pl = plot;
-      info.path = pathWays;
+      info.path = ways;
       for (let item of drawnObjects) {
         info[i] = [
           item.s,
@@ -112,7 +111,7 @@ function lockGetReady(callresult) {
           item.X,
           item.Y,
           item.W,
-                item.H,
+          item.H,
           item.angle,
         ];
 
@@ -157,15 +156,15 @@ function updateReady(callresult) {
 }
 
 export function restoreInfo() {
-    $.ajax({
-      url: ajaxHandlerScript,
-      type: 'POST',
-      cache: false,
-      dataType: 'json',
-      data: { f: 'READ', n: stringName },
-      success: readReady,
-      error: errorHandler,
-    });
+  $.ajax({
+    url: ajaxHandlerScript,
+    type: 'POST',
+    cache: false,
+    dataType: 'json',
+    data: { f: 'READ', n: stringName },
+    success: readReady,
+    error: errorHandler,
+  });
 }
 
 function readReady(callresult) {
@@ -183,16 +182,18 @@ function readReady(callresult) {
             plot.H = drawnObject[key].H;
             plot.ratio = drawnObject[key].ratio;
             plot.scale = drawnObject[key].scale;
-
-          }
-
-           else if (key === 'path') {
-            for (let i = 0; i < drawnObject[key].length; i++) {
-              pathWays[i] = drawnObject[key][i];
+          } else if (key === 'path') {
+            for (let item of drawnObject[key]) {
+              item.pattern = new Image();
+              item.pattern.onload = function () {
+                drawPath(item);
+              };
+              item.pattern.src = `/img/pathway/${item.number}.png`;
+              ways.push(item);
             }
           } else {
             addImage(
-                            drawnObject[key][0],
+              drawnObject[key][0],
               drawnObject[key][1],
               drawnObject[key][2],
               drawnObject[key][3],
@@ -200,7 +201,6 @@ function readReady(callresult) {
               drawnObject[key][5],
               drawnObject[key][6]
             );
-
           }
         }
         // console.log('объекты пользователя нарисованы');

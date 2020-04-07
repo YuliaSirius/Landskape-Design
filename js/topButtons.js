@@ -6,8 +6,8 @@ import { reDraw } from './landscape.js';
 import { canvas } from './landscape.js';
 import { ffff } from './landscape.js';
 import { plot } from './plotsSizes.js';
+import { ways } from './leftButtons.js';
 import { addedPath } from './leftButtons.js';
-import { pathWays } from './leftButtons.js';
 import { showDemo } from './templates.js';
 
 
@@ -55,6 +55,7 @@ function save() {
 }
 
 function showNew() {
+  ways.splice(ways[0], ways.length);
   drawnObjects.splice(drawnObjects[0], drawnObjects.length);
   plot.W = 0;
   plot.H = 0;
@@ -112,13 +113,13 @@ function savePicture() {
 function goBack() {}
 
 function deleteObj() {
-  if (!drawnObjects[0] && !pathWays[0]) return;
+  if (!drawnObjects[0] && !ways[0]) return;
   if (addedObj) {
     drawnObjects.splice(drawnObjects.indexOf(addedObj), 1);
   }
   console.log(addedPath);
   if (addedPath) {
-    pathWays.splice(pathWays.indexOf(addedPath), 1);
+    ways.splice(ways.indexOf(addedPath), 1);
   }
    reDraw();
   addedObj === null;
@@ -126,9 +127,9 @@ function deleteObj() {
 }
 
 function deleteAll() {
-  if (!drawnObjects[0] && !pathWays[0]) return;
+  if (!drawnObjects[0] && !ways[0]) return;
   drawnObjects.splice(drawnObjects[0], drawnObjects.length);
-  pathWays.splice(pathWays[0], pathWays.length);
+  ways.splice(ways[0], ways.length);
   reDraw();
 }
 

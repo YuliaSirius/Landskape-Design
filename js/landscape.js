@@ -2,17 +2,12 @@ import { zoom } from './events.js';
 import { zoomStep } from './events.js';
 import { plot } from './plotsSizes.js';
 import { image } from './leftButtons.js';
-import { pathWays } from './leftButtons.js';
-import { drawPathWay } from './leftButtons.js';
+import { drawPath } from './leftButtons.js';
 import { ways } from './leftButtons.js';
-
-import { pathCoord } from './leftButtons.js';
-// import { ways } from './leftButtons.js';
 import { createTopMenu } from './topButtons.js';
 import { restoreInfo } from './ajax.js';
 export let canvas = document.getElementById('cnv');
 export let cnt = canvas.getContext('2d');
-
 
 function resize(canvas) {
   let displayWidth = canvas.clientWidth;
@@ -33,7 +28,6 @@ window.onload = function () {
   window.addEventListener('resize', resizeCanvas);
   reDraw();
 };
-
 
 function resizeCanvas() {
   resize(canvas);
@@ -60,9 +54,9 @@ export function reDraw() {
   for (let item of drawnObjects) {
     drawImage(item);
   }
-  for (let item of pathWays) {
-    drawPathWays(item);
-  }
+  for (let item of ways) {
+    drawPath(item);
+    }
 }
 
 export function drawLines(step) {
@@ -92,6 +86,7 @@ export function drawPlot() {
   } else {
     createPlot(plot.X, plot.Y, plot.W * plot.scale, plot.H * plot.scale);
   }
+
 }
 
 function createPlot(X, Y, W, H) {
@@ -227,16 +222,16 @@ function drawImage(img) {
   canvas.addEventListener('mousedown', getObj);
 }
 
- let currObj;
- let topLeft;
- let topRight;
- let bottomLeft;
- let bottomRight;
- let top;
- let bottom;
- let right;
- let left;
- let rotation;
+let currObj;
+let topLeft;
+let topRight;
+let bottomLeft;
+let bottomRight;
+let top;
+let bottom;
+let right;
+let left;
+let rotation;
 
 export let addedObj; //current.added
 
@@ -250,10 +245,10 @@ export function getObj(e) {
     if (cnt.isPointInPath(item.template, x, y)) {
       currObj = item;
       addedObj = item;
-     
+
       item.elemLeft = x - item.X;
       item.elemTop = y - item.Y;
-     
+
       if (!item.rotation) {
         cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
         cnt.strokeStyle = 'rgb(68, 109, 245)';
@@ -555,7 +550,7 @@ function moveObj(e) {
     currObj.Y = e.offsetY - currObj.elemTop; //- offY;
   }
   reDraw();
- 
+
   cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
   cnt.strokeStyle = 'rgb(68, 109, 245)';
   drawSelect(currObj);
@@ -571,7 +566,7 @@ function letGoObj() {
     drawSelect(currObj);
     cnt.fillStyle = 'black';
     drawSize(currObj);
-   }
+  }
   currObj = null;
   topLeft = false;
   topRight = false;
@@ -602,9 +597,9 @@ function drawPathWays(item) {
     }
     cnt.stroke(path);
     path.coord = pathCoord;
-      // path.number = item.number;
-      // pathWays.push([pathCoord, item.number]);
-      // drawSel(pathCoord);
+    // path.number = item.number;
+    // pathWays.push([pathCoord, item.number]);
+    // drawSel(pathCoord);
     ways.push(path);
   }
 

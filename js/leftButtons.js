@@ -52,18 +52,16 @@ let mouseDownImage = function (e) {
         number = i + 1;
       }
     }
-    
+
     let angle = 0;
     let X = canvas.width / 2;
     let Y = canvas.height / 2;
     let W = image[this.id].width;
     let H = image[this.id].height;
 
-    // if (this.id === 'pathway') {
-    //   drawPathWay(number);
-    // } 
-    // else
-     addImage(this.id, number, X, Y, W, H, angle);
+    if (this.id === 'pathway') {
+      drawPathWay(number);
+    } else addImage(this.id, number, X, Y, W, H, angle);
   }
 };
 
@@ -101,95 +99,59 @@ function mouseLeave() {
   s.style.display = 'none';
 }
 
-export let pathWays = [];
-export let pathCoord = [];
-let downCoord = [];
-let pattern;
 export let ways = [];
-let path;
 
-export function drawPathWay(number) {
-  canvas.addEventListener('click', startDraw);
-  function startDraw(e) {
-    let x = e.clientX;
-    let y = e.clientY;
-    cnt.fillStyle = 'white';
-    cnt.beginPath();
-    cnt.arc(x, y, 8, 0, 2 * Math.PI);
-    cnt.fill();
-    pathCoord.push([x, y]);
-    downCoord.push([x, y]);
-    canvas.addEventListener('contextmenu', finishDrawing);
-  }
+let path = {};
 
-  function finishDrawing(e) {
-    e.preventDefault();
-    cnt.lineJoin = 'bevel';
-    cnt.lineCap = 'butt';
-    pattern = new Image();
-    pattern.onload = drawPattern();
-
-    function drawPattern() {
-      pattern.src = `/img/pathway/${number}.png`;
-      path = new Path2D();
-      let patt = cnt.createPattern(pattern, 'repeat');
-      // cnt.fillStyle = 'black';
-      // for (let i of pathCoord) {
-      //   // var p = new Path2D('M10 10 h 80 v 80 h -80 Z');
-      //   // ctx.fill(p);
-      //   path.rect(i[0], i[1], i + (1)[0] - i[0], i + (1)[1] - i[1]);
-      // }
-      // cnt.fill(path);
-
-      cnt.lineWidth = plot.scale;
-      cnt.strokeStyle = patt;
-      // cnt.strokeStyle = 'rgba(0, 0, 0, 0)';
-      path.moveTo(pathCoord[0][0], pathCoord[0][1]);
-      for (let i of pathCoord) {
-        path.lineTo(i[0], i[1]);
-      }
-      cnt.stroke(path);
-
-      // cnt.fillStyle = 'black';
-      // // cnt.lineWidth = 1;
-      // cnt.strokeStyle = 'black';
-      // path.template = new Path2D();
-
-      // path.template.moveTo(pathCoord[0][0], pathCoord[0][1]);
-      // console.log(pathCoord);
-      // for (let i of pathCoord) {
-      //   // path.template.rect(i[0], i[1], 100,plot.scale);
-      //   // }
-      //   path.template.lineTo(i[0], i[1]);
-      //   // path.template.lineTo(XY[0], XY[1]);
-
-      //   // path.template.lineTo(XY[0], XY[1]);
-      // }
-      // // path.template.closePath();
-      // cnt.stroke(path.template);
-
-      // let shiftX = [];
-      // let shiftY = [];
-      // for (let item of pathCoord) {
-      //   shiftX.push(item[0]);
-      //   shiftY.push(item[1]);
-      // }
-      // path.X = Math.min(...shiftX);
-      // path.Y = Math.min(...shiftY);
-      path.coord = pathCoord;
-      path.number = number;
-      pathWays.push([pathCoord, number]);
-      drawSel(pathCoord);
-    }
-    ways.push(path);
-    canvas.addEventListener('mousedown', getPath);
-    canvas.removeEventListener('click', startDraw);
-    canvas.removeEventListener('contextmenu', finishDrawing);
-  }
-  pathCoord = [];
+// let downCoord = [];
+function drawPathWay(number) {
+  path.pattern = new Image();
+  path.pattern.onload = Draw(path);
+  path.pattern.src = `/img/pathway/${number}.png`;
+  path.number = number;
+  path.coord = [];
+  path.downCoord = [];
 }
 
-function drawSel(coord) {
+function Draw() {
+  canvas.addEventListener('click', startdraw);
+}
+
+function startdraw(e) {
+  let x = e.clientX;
+  let y = e.clientY;
+  path.coord.push([x, y]);
+  path.downCoord.push([x, y]);
+  if (path.coord.length >= 2) {
+    draw();
+    canvas.removeEventListener('click', startdraw);
+  }
+}
+
+function draw() {
+  drawPath(path);
+  drawSel(path.coord);
+  ways.push(path);
+  path = {};
+}
+let currentPath = null;
+
+export function drawPath(obj) {
+  obj.way = new Path2D();
+  let patt = cnt.createPattern(obj.pattern, 'repeat');
+  cnt.fillStyle = patt;
+  cnt.beginPath();
+  obj.way.moveTo(obj.coord[0][0], obj.coord[0][1] - plot.scale / 2);
+  obj.way.lineTo(obj.coord[1][0], obj.coord[1][1] - plot.scale / 2);
+  obj.way.lineTo(obj.coord[1][0], obj.coord[1][1] + plot.scale / 2);
+  obj.way.lineTo(obj.coord[0][0], obj.coord[0][1] + plot.scale / 2);
+  obj.way.closePath();
+  cnt.fill(obj.way);
+  canvas.addEventListener('mousedown', getPath);
+  canvas.addEventListener('mouseup', letGoPath);
+}
+
+function drawSel(coord) { //??????????????????????
   cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
   cnt.strokeStyle = 'rgb(68, 109, 245)';
   for (let item of coord) {
@@ -200,67 +162,54 @@ function drawSel(coord) {
     cnt.stroke();
   }
 }
-let pathNumber;
-let down;
-export let addedPath
+
+let down = [];
+export let addedPath;
 function getPath(e) {
   let x = e.offsetX;
   let y = e.offsetY;
-  addedPath = null;
   down = [x, y];
+  currentPath = null;
+  addedPath = null;
   for (let item of ways) {
-    if (cnt.isPointInPath(item, x, y)) {
-       // addedPath = true;
-      console.log(1);
-      drawSel(item.coord);
-      for (let it of pathWays) {
-        if (it[1] === item.number) {
-          pathNumber = it[1];
-          addedPath = it
-          // it.added = true
-        }
-      }
-    } else return;
+    if (cnt.isPointInPath(item.way, x, y)) {
+      currentPath = item;
+      addedPath = item;
+      cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      cnt.strokeStyle = 'rgb(68, 109, 245)';
+      drawSel(currentPath.coord);
+    }
   }
-  // canvas.addEventListener('mousemove', movePath);
-  canvas.addEventListener('mouseup', letGoPath);
+  canvas.addEventListener('mousemove', movePath);
 }
 
 function movePath(e) {
   let x = e.offsetX;
   let y = e.offsetY;
-  for (let it of pathWays) {
-    if (it[1] === pathNumber) {
-      for (let i = 0; i < it[0].length; i++) {
-        it[0][i][0] = downCoord[i][0] + (x - down[0]);
-        it[0][i][1] = downCoord[i][1] + (y - down[1]);
-        // it[0][i][0] = ways.coord
-        // it[0][i][1]
-      }
-     
-      // for (let i = 0; i < ways.length; i++) {
-      //   console.log(ways[i].coord)
-      //   console.log( pathWays[i][0])
-      //   ways[i].coord = pathWays[i][0];
-      // }
-
-
-      ////////////// теперь у ways другие координаты
-      // path.coord = pathCoord;
-      // path.number = number;
-      // pathWays.push([pathCoord, number]);
-      reDraw();
-      drawSel(it[0]);
-    }
-
-    console.log(pathWays);
-    console.log(ways[0].coord);
+  if (!currentPath) {
+    return;
   }
+  currentPath.coord[0][0] = currentPath.downCoord[0][0] + (x - down[0]);
+  currentPath.coord[0][1] = currentPath.downCoord[0][1] + (y - down[1]);
+  currentPath.coord[1][0] = currentPath.downCoord[1][0] + (x - down[0]);
+  currentPath.coord[1][1] = currentPath.downCoord[1][1] + (y - down[1]);
+  reDraw();
+  cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
+  cnt.strokeStyle = 'rgb(68, 109, 245)';
+  drawSel(currentPath.coord);
 }
 
 function letGoPath() {
-  pathNumber = null;
-  ways = [];
+  if (currentPath) {
+    cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    cnt.strokeStyle = 'rgb(68, 109, 245)';
+    currentPath.downCoord[0][0] = currentPath.coord[0][0];
+    currentPath.downCoord[0][1] = currentPath.coord[0][1];
+    currentPath.downCoord[1][0] = currentPath.coord[1][0];
+    currentPath.downCoord[1][1] = currentPath.coord[1][1];
+    drawSel(currentPath.coord);
+  }
+  // reDraw();
+  currentPath = null;
   canvas.removeEventListener('mousemove', movePath);
-  reDraw();
 }
