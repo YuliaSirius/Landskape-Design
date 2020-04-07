@@ -12,7 +12,7 @@ export function showDemo() {
 function createImages() {
   for (let i = 1; i < 5; i++) {
     let img = document.createElement('img');
-    img.src = `../img/img${i}.png`;
+    img.src = `./img/img${i}.png`;
     img.className = `imgDemo${i}`;
     document.body.append(img);
   }
