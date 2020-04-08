@@ -6,7 +6,6 @@ import { drawPath } from './leftButtons.js';
 import { plot } from './plotsSizes.js';
 import { currentUser } from './topButtons.js';
 import { ways } from './leftButtons.js';
-import { cnt } from './landscape.js';
 
 let ajaxHandlerScript = 'https://fe.it-academy.by/AjaxStringStorage2.php';
 let updatePassword;
@@ -63,7 +62,6 @@ let stringName = 'MIASNIKOVA_LANDSKAPE_OBJECTS';
 
 // ///////////////////////////////////////////
 
-let savedObjects;
 let savedLast;
 let allUsers = [];
 export function storeInfo() {
@@ -96,9 +94,12 @@ function lockGetReady(callresult) {
       if (callresult.error != undefined) alert(callresult.error);
       else if (callresult.result != '') {
         savedLast = JSON.parse(callresult.result);
+        allUsers = savedLast;
+        // allUsers = [];
         updateData();
       }
     }
+
     function updateData() {
       let i = 1;
       let info = { pl: {} };
@@ -114,25 +115,33 @@ function lockGetReady(callresult) {
           item.H,
           item.angle,
         ];
-
         i++;
       }
       let user = { userData: currentUser, userInfo: info };
 
+      let is = true;
       if (!savedLast[0]) {
         allUsers.push(user);
+        console.log('строка пустая');
       } else {
-        for (let item of savedLast) {
-          if (JSON.stringify(item.userData) === JSON.stringify(user.userData)) {
+        for (let item of allUsers) {
+          console.log(item.userData);
+          if (JSON.stringify(item.userData) === JSON.stringify(currentUser)) {
             item.userInfo = user.userInfo;
-            allUsers = savedLast;
-            // console.log('тот же пользователь');
+            is = true;
           } else {
-            // console.log('новый пользователь');
-            allUsers.push(user);
+            is = false;
           }
         }
       }
+      ggg();
+      function ggg() {
+        if (!is) {
+          allUsers.push(user);
+        }
+      }
+
+      // }
 
       $.ajax({
         url: ajaxHandlerScript,
@@ -154,6 +163,8 @@ function lockGetReady(callresult) {
 function updateReady(callresult) {
   if (callresult.error != undefined) alert(callresult.error);
 }
+
+let savedObjects = [];
 
 export function restoreInfo() {
   $.ajax({

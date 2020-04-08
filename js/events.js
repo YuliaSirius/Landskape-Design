@@ -16,10 +16,8 @@ export function addOnWheel(elem, handler) {
   }
 }
 
-
 export let zoom = 1;
 export let zoomStep = 1.03;
-
 export let offX;
 export let offY;
 // let commonOffsetX = 0;

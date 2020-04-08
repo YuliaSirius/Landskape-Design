@@ -11,7 +11,6 @@ export let plot = {
   scale: 30
 };
 
-
 export function getPlot() {
   if (!plot.W) {
     getPlotSizes();

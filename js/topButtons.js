@@ -94,6 +94,7 @@ function createButton(name, handler, left) {
 
 function LogOff() {
   localStorage.removeItem('user');
+  currentUser = []
   window.location.reload();
 }
 

@@ -29,6 +29,7 @@ window.onload = function () {
   reDraw();
 };
 
+
 function resizeCanvas() {
   resize(canvas);
   reDraw();

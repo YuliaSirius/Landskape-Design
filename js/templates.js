@@ -18,7 +18,6 @@ function createImages() {
   }
 }
 
-
 let offsetX;
 let offsetY;
 let angle;
