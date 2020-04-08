@@ -580,33 +580,7 @@ function letGoObj() {
   canvas.removeEventListener('mousemove', moveObj);
 }
 
-function drawPathWays(item) {
-  cnt.lineJoin = 'bevel';
-  cnt.lineCap = 'butt';
-  let pattern = new Image();
-  pattern.onload = drawPattern;
-  pattern.src = `/img/pathway/${item[1]}.png`;
-  function drawPattern() {
-    let path = new Path2D();
-    let patt = cnt.createPattern(pattern, 'repeat');
-    cnt.strokeStyle = patt;
-    cnt.lineWidth = plot.scale;
-    path.moveTo(item[0][0][0], item[0][0][1]);
-    for (let i of item[0]) {
-      path.lineTo(i[0], i[1]);
-    }
-    cnt.stroke(path);
-    path.coord = pathCoord;
-    // path.number = item.number;
-    // pathWays.push([pathCoord, item.number]);
-    // drawSel(pathCoord);
-    ways.push(path);
-  }
-
-  // canvas.addEventListener('mousedown', getPath);
-}
-
-export function ffff() {
+export function removeSelection() {
   topLeft = false;
   topRight = false;
   bottomLeft = false;

@@ -4,7 +4,7 @@ import { drawnObjects } from './landscape.js';
 import { addedObj } from './landscape.js';
 import { reDraw } from './landscape.js';
 import { canvas } from './landscape.js';
-import { ffff } from './landscape.js';
+import { removeSelection } from './landscape.js';
 import { plot } from './plotsSizes.js';
 import { ways } from './leftButtons.js';
 import { addedPath } from './leftButtons.js';
@@ -98,11 +98,8 @@ function LogOff() {
 }
 
 function savePicture() {
-
-  ffff()
- 
-  
-  reDraw();
+  removeSelection()
+   reDraw();
   let dataURL = canvas.toDataURL();
   let link = document.createElement('a');
   link.href = dataURL;

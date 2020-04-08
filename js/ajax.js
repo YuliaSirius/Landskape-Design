@@ -188,7 +188,7 @@ function readReady(callresult) {
               item.pattern.onload = function () {
                 drawPath(item);
               };
-              item.pattern.src = `/img/pathway/${item.number}.png`;
+              item.pattern.src = `./img/pathway/${item.number}.png`;
               ways.push(item);
             }
           } else {

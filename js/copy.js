@@ -147,7 +147,6 @@ export function drawPathWay(number) {
     cnt.lineCap = 'butt';
     pattern = new Image();
     pattern.onload = drawPattern();
-
     function drawPattern() {
       pattern.src = `/img/pathway/${number}.png`;
       path = new Path2D();

@@ -106,8 +106,10 @@ let path = {};
 // let downCoord = [];
 function drawPathWay(number) {
   path.pattern = new Image();
-  path.pattern.onload = Draw(path);
-  path.pattern.src = `/img/pathway/${number}.png`;
+  path.pattern.onload = function () {
+    Draw(path);
+  };
+  path.pattern.src = `./img/pathway/${number}.png`;
   path.number = number;
   path.coord = [];
   path.downCoord = [];
@@ -151,7 +153,8 @@ export function drawPath(obj) {
   canvas.addEventListener('mouseup', letGoPath);
 }
 
-function drawSel(coord) { //??????????????????????
+function drawSel(coord) {
+  //??????????????????????
   cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
   cnt.strokeStyle = 'rgb(68, 109, 245)';
   for (let item of coord) {

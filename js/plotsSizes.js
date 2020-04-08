@@ -23,7 +23,6 @@ export function getPlot() {
   }
 }
 
-
 function getPlotSizes() {
   let plotsWidth;
   let plotsHeight;
