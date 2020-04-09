@@ -52,23 +52,22 @@ let mouseDownImage = function (e) {
         number = i + 1;
       }
     }
-
     let angle = 0;
     let X = canvas.width / 2;
     let Y = canvas.height / 2;
     let W = image[this.id].width;
     let H = image[this.id].height;
-
     if (this.id === 'pathway') {
       drawPathWay(number);
     } else addImage(this.id, number, X, Y, W, H, angle);
   }
 };
 
-let buttons = [...document.querySelectorAll('.button')];
-
-for (let i = 0; i < buttons.length; i++) {
-  buttons[i].addEventListener('mouseenter', mouseEnter);
+export function addEventMouseEnter() {
+  let buttons = [...document.querySelectorAll('.button')];
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('mouseenter', mouseEnter);
+  }
 }
 
 function mouseEnter() {

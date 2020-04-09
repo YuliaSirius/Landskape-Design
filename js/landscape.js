@@ -4,10 +4,12 @@ import { plot } from './plotsSizes.js';
 import { image } from './leftButtons.js';
 import { drawPath } from './leftButtons.js';
 import { ways } from './leftButtons.js';
+import { addEventMouseEnter } from './leftButtons.js';
 import { createTopMenu } from './topButtons.js';
+import { addListener } from './events.js';
 import { restoreInfo } from './ajax.js';
-export let canvas = document.getElementById('cnv');
-export let cnt = canvas.getContext('2d');
+export let canvas;
+export let cnt;
 
 function resize(canvas) {
   let displayWidth = canvas.clientWidth;
@@ -15,20 +17,21 @@ function resize(canvas) {
   if (canvas.width != displayWidth || canvas.height != displayHeight) {
     canvas.width = displayWidth;
     canvas.height = displayHeight;
-    cnt.fillStyle = 'rgba(202, 200, 200, 0.2)';
+    // cnt.fillStyle = 'rgba(202, 200, 200, 0.2)';
     cnt.fillRect(0, 0, canvas.width, canvas.height);
   }
 }
 
-window.onload = function () {
+function startMain() {
+  canvas = document.getElementById('cnv');
+  cnt = canvas.getContext('2d');
+
   createTopMenu();
   resize(canvas);
-  // drawLines(30, 0, 0);
   restoreInfo();
   window.addEventListener('resize', resizeCanvas);
   reDraw();
-};
-
+}
 
 function resizeCanvas() {
   resize(canvas);
@@ -43,6 +46,7 @@ export function reDraw() {
   cnt.fillRect(0, 0, canvas.width, canvas.height);
   drawLines(plot.scale);
   drawPlot();
+
   if (plot.X) {
     drawArrows(
       plot.X,
@@ -57,7 +61,7 @@ export function reDraw() {
   }
   for (let item of ways) {
     drawPath(item);
-    }
+  }
 }
 
 export function drawLines(step) {
@@ -87,7 +91,6 @@ export function drawPlot() {
   } else {
     createPlot(plot.X, plot.Y, plot.W * plot.scale, plot.H * plot.scale);
   }
-
 }
 
 function createPlot(X, Y, W, H) {
@@ -234,8 +237,7 @@ let right;
 let left;
 let rotation;
 
-export let addedObj; //current.added
-
+export let addedObj;
 export function getObj(e) {
   let x = e.offsetX;
   let y = e.offsetY;
@@ -591,4 +593,239 @@ export function removeSelection() {
   right = false;
   left = false;
   rotation = false;
+}
+
+////////  SPA
+let logo = document.querySelector('.logo');
+logo.addEventListener('click', switchToMainPage);
+
+let about = document.querySelector('.about');
+about.addEventListener('click', switchToAboutPage);
+
+window.onhashchange = switchToStateFromURLHash;
+let count = 1;
+let SPAState = {};
+let pictures = {
+  1: './img/img1.png',
+  2: './img/img1.png',
+  3: './img/img1.png',
+  4: './img/img1.png',
+
+};
+function switchToStateFromURLHash() {
+  let URLHash = window.location.hash;
+  let stateStr = URLHash.substr(1);
+  if (stateStr != '') {
+    SPAState = { pagename: stateStr };
+  } else SPAState = { pagename: 'Main' };
+
+  let page = document.getElementById('IPage');
+  page.innerHTML = '';
+  switch (SPAState.pagename) {
+    case 'Main':
+      page.innerHTML = addHtml();
+      addListener();
+      addEventMouseEnter();
+      startMain();
+      break;
+    case 'About':
+      page.innerHTML = `<div class="about_text"><h3>Description of the application</h3><p>
+       The application allows you to create an individual plan of a suburban area
+       indicating the boundaries of the site (fence), the arrangement of capital
+        structures (house, bathhouse, garage, outbuildings, pool, gazebo, etc.). 
+        Allows you to break down the territory of the site into functional areas 
+        (barbecue area, recreation area, work area, sanitary area, etc.). To design the
+         form and type of pavement, walkway, car race, lawn zone, garden zone with the area
+          of ​​each zone and when choosing the coating material (paving slabs, stone, asphalt,
+             concrete, lawn, etc.), its required consumption. Arrange the trees and shrubs
+              with the calculation of their quantity required for this site.
+        If necessary, the site plan and created elements can be displayed in jpeg format
+       for easy storage and printing on paper if necessary.
+      The calculation results are summarized in tabular form with a brief description
+       (area, type of coating, volume of material, etc.).</p></div>`;
+      count = 1;
+      showPictures();
+      break;
+  }
+}
+
+function switchToState(newState) {
+  let stateStr = newState.pagename;
+  location.hash = stateStr;
+}
+function switchToMainPage() {
+  switchToState({ pagename: 'Main' });
+}
+function switchToAboutPage() {
+  switchToState({ pagename: 'About' });
+}
+
+switchToStateFromURLHash();
+
+function addHtml() {
+  let tegs = `<div class="buttons">
+  <div class="button">
+    <img class="btn_img" src="./img/tree.png" alt="plants" />
+    <span>PLANTS</span>
+    <div class="submenu">
+      <div class="catalog">
+        <img class="btn_img" src="./img/tree.png" alt="tree" />
+        <span>Trees</span>
+        <div class="sub" id="trees"> </div>
+      </div>
+      <div class="catalog">
+        <img class="btn_img" src="./img/shrub.png" alt="shrub" />
+        <span>Shrubs</span>
+        <div class="sub" id="shrubs"> </div>
+      </div>
+
+      <div class="catalog">
+        <img class="btn_img" src="./img/flower.png" alt="flower" />
+        <span>Flowers</span>
+        <div class="sub" id="flowers"> </div>
+      </div>
+      <div class="catalog">
+        <img class="btn_img" src="./img/grass.png" alt="grass" />
+        <span>Grass</span>
+      </div>
+    </div>
+  </div>
+  <div class="button">
+    <img class="btn_img" src="./img/stone.png" alt="stone" />
+    <span>STONES</span>
+    <div class="submenu">
+      <div class="catalog">
+        <img class="btn_img" src="./img/smooth/6.png" alt="stone" />
+        <span>Smooth</span>
+        <div class="sub" id="smooth">
+        </div>
+      </div>
+      <div class="catalog">
+        <img class="btn_img" src="./img/angular/2.png" alt="stone" />
+        <span>Angular</span>
+        <div class="sub" id="angular">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="button">
+    <img class="btn_img" src="./img/paving.png" alt="paving" />
+    <div class="submenu">
+      <div class="catalog">
+        <img class="btn_img" src="./img/pathWay.png" alt="path" />
+        <span>Pathway</span>
+        <div class="sub" id="pathway"> </div>
+      </div>
+      <div class="catalog">
+        <img class="btn_img" src="./img/pavement.png" alt="pavement" />
+        <span>Pavement</span>
+        <div class="sub" id="pavement"> </div>
+      </div>
+    </div>
+    <span>PAVING</span>
+  </div>
+  <div class="button">
+    <img class="btn_img" src="./img/ponds.png" alt="ponds" />
+    <span>PONDS</span>
+    <div class="submenu">
+      <div class="catalog">
+        <img class="btn_img" src="./img/ponds.png" alt="ponds" />
+        <span>Ponds</span>
+        <div class="sub" id="ponds"> </div>
+      </div>
+      <div class="catalog">
+        <img class="btn_img" src="./img/pools.png" alt="pools" />
+        <span>Pools</span>
+        <div class="sub" id="pools"> </div>
+      </div>
+      <div class="catalog">
+        <img class="btn_img" src="./img/fountains.png" alt="fountains" />
+        <span>Fountains</span>
+        <div class="sub" id="fountains"> </div>
+      </div>
+    </div>
+  </div>
+  <div class="button">
+    <img class="btn_img" src="./img/furniture.png" alt="furniture" />
+    <span>LEISURE</span>
+    <div class="submenu">
+      <div class="catalog">
+        <img class="btn_img" src="./img/furniture.png" alt="cars" />
+        <span>Furniture</span>
+        <div class="sub" id="furniture"> </div>
+      </div>
+    </div>
+  </div>
+  <div class="button">
+    <img class="btn_img" src="./img/cars.png" alt="cars" />
+    <span>VEHICLES</span>
+    <div class="submenu">
+      <div class="catalog">
+        <img class="btn_img" src="./img/cars.png" alt="cars" />
+        <span>Cars</span>
+        <div class="sub" id="cars"> </div>
+      </div>
+      <div class="catalog">
+        <img class="btn_img" src="./img/scooters.png" alt="scooters" />
+        <span>Scooters</span>
+        <div class="sub" id="scooters"> </div>
+      </div>
+    </div>
+  </div>
+  <div class="button">
+    <img class="btn_img" src="./img/house.png" alt="house" />
+    <span>HOUSE</span>
+    <div class="submenu">
+      <div class="catalog">
+        <img class="btn_img" src="./img/house.png" alt="houses" />
+        <span>Houses</span>
+        <div class="sub" id="houses"> </div>
+      </div>
+      <div class="catalog">
+        <img class="btn_img" src="./img/house.png" alt="stairs" />
+        <span>Stairs</span>
+        <div class="sub" id="stairs"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<canvas id="cnv"></canvas>
+<div id="prompt-form-container">
+  <form id="prompt-form">
+    <div id="prompt-message">Enter the sizes of your plot:</div>
+    <div>
+      <label for="width">length:</label>
+      <label>
+        <input id="width" name="width" type="text" autocomplete="off" />
+        (m)</label>
+    </div>
+    <div>
+      <label for="height">width:</label>
+      <label><input id="height" name="height" type="text" autocomplete="off" />
+        (m)</label>
+    </div>
+    <input type="submit" value=" OK " />
+    <input type="button" name="cancel" value=" Cancel " />
+  </form>
+</div>`;
+  return tegs;
+}
+
+function showPictures() {
+  
+  setTimeout(() => show(count), 2000);
+}
+function show(key) {
+  if (SPAState.pagename !== 'About') return;
+  count++;
+  let page = document.getElementById('IPage');
+  page.innerHTML += `<img class="picture${key}" src=${pictures[key]}  />`;
+
+  if (key > 1) {
+    let picture = document.querySelector(`.picture${key - 1}`);
+    picture.style.animation = 'my-animation1';
+  }
+  if (count > Object.keys(pictures).length) {
+    return;
+  } else showPictures();
 }

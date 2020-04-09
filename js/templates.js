@@ -1,8 +1,14 @@
+import { showNew } from './topButtons.js';
+import { ways } from './leftButtons.js';
+import { drawnObjects } from './landscape.js';
+import { reDraw } from './landscape.js';
+import { plot } from './plotsSizes.js';
+import { addImage } from './landscape.js';
+import { drawPath } from './leftButtons.js';
 let addedDemo;
 
 export function showDemo() {
   if (addedDemo) return;
-
   createImages();
   start();
   createReadme();
@@ -20,14 +26,15 @@ function createImages() {
 
 let offsetX;
 let offsetY;
-let angle;
+// let angle;
 let scaleX;
 let scaleY;
+
 function start() {
   requestAnimationFrame(tick);
   offsetX = 0;
   offsetY = 0;
-  angle = 0;
+  // angle = 0;
   scaleX = 1;
   scaleY = 1;
 }
@@ -35,7 +42,7 @@ function start() {
 function tick() {
   scaleX += 0.03;
   scaleY += 0.03;
-  offsetX += 6;
+  offsetX += 6.5;
   offsetY += 2.8;
   //   angle += 5;
   if (
@@ -43,14 +50,15 @@ function tick() {
     offsetY > document.documentElement.clientHeight - 50 * scaleY - 100
   ) {
     showReadme();
-     return;
+    return;
   }
   update();
   requestAnimationFrame(tick);
 }
 
-
 function update() {
+  // элементы не вынесены на отдельный GPU-слой, потому что после того, как
+  // для них сработает css-анимация transform, браузер вынесет их на отдельный слой самостоятельно
   let img1 = document.querySelector('.imgDemo1');
   img1.style.transform = `matrix(${scaleX}, 0, 0, ${scaleY},${offsetX},${offsetY})`;
   // img1.style.transform = `rotate(${angle}deg)`;
@@ -84,17 +92,17 @@ function createReadme() {
     }
   };
 }
-
+let isAdded;
 function showReadme() {
   let readme = document.querySelector('.readme');
   readme.style.display = 'flex';
-  document.addEventListener('click', chooseTemplate)
+  document.addEventListener('click', chooseTemplate);
+  isAdded = false;
 }
 
 function hideReadme() {
   let readme = document.querySelector('.readme');
   readme.remove();
-  // readme.style.display = 'none';
   for (let i = 1; i < 5; i++) {
     let img = document.querySelector(`.imgDemo${i}`);
     img.remove();
@@ -103,7 +111,73 @@ function hideReadme() {
   document.onkeydown = null;
 }
 
-function chooseTemplate() {
+function chooseTemplate(e) {
+  let img1 = document.querySelector('.imgDemo1');
+  if (e.target === img1) {
+    let count = 'templ1';
+    showTemplate(count);
+  } else return;
+}
 
+let ajaxHandlerScript = 'https://fe.it-academy.by/AjaxStringStorage2.php';
 
+function showTemplate(count) {
+  if (isAdded) return;
+  $.ajax({
+    url: ajaxHandlerScript,
+    type: 'POST',
+    cache: false,
+    dataType: 'json',
+    data: { f: 'READ', n: 'MIASNIKOVA_LANDSKAPE_TEMPLATES' },
+    success: readReady,
+    error: errorHandler,
+  });
+
+  function readReady(callresult) {
+    if (callresult.error != undefined) alert(callresult.error);
+    else if (callresult.result != '') {
+      let savedTemplates = JSON.parse(callresult.result);
+      drawTemplates(savedTemplates[count]);
+    }
+  }
+
+  function errorHandler(jqXHR, statusStr, errorStr) {
+    alert(statusStr + ' ' + errorStr);
+  }
+}
+
+function drawTemplates(template) {
+  showNew();
+  for (let key in template) {
+    if (key === 'pl') {
+      plot.X = template[key].X;
+      plot.Y = template[key].Y;
+      plot.W = template[key].W;
+      plot.H = template[key].H;
+      plot.ratio = template[key].ratio;
+      plot.scale = template[key].scale;
+    } else if (key === 'path') {
+      for (let item of template[key]) {
+        item.pattern = new Image();
+        item.pattern.onload = function () {
+          drawPath(item);
+        };
+        item.pattern.src = `./img/pathway/${item.number}.png`;
+        ways.push(item);
+      }
+    } else {
+      addImage(
+        template[key][0],
+        template[key][1],
+        template[key][2],
+        template[key][3],
+        template[key][4],
+        template[key][5],
+        template[key][6]
+      );
+    }
+  }
+  isAdded = true;
+  hideReadme();
+  reDraw();
 }

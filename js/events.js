@@ -65,7 +65,7 @@ function mouseDown() {
     mouseX = event.pageX + offX;
     mouseY = event.pageY + offY;
     // document.addEventListener('mousemove', mouseMove);
-    event.target.ondragstart = function() {
+    event.target.ondragstart = function () {
       return false;
     };
     // }
@@ -95,10 +95,12 @@ function mouseUp() {
 }
 
 // move main buttons
+let mainButtons
 
-let mainButtons = document.querySelector('.buttons');
+export function addListener() {
+  mainButtons = document.querySelector('.buttons');
 mainButtons.addEventListener('mousedown', getButtons);
-
+}
 let elemLeft;
 let elemTop;
 let sizeLeft = 0;
@@ -109,7 +111,7 @@ function getButtons(e) {
   elemLeft = event.pageX - sizeLeft;
   elemTop = event.pageY - sizeTop;
   document.addEventListener('mousemove', moveButtons);
-  event.target.ondragstart = function() {
+  event.target.ondragstart = function () {
     return false;
   };
 }
@@ -132,7 +134,7 @@ function moveButtons() {
   if (sizeTop < 20) {
     mainButtons.style.top = '0px';
   }
-  
+
   if (
     sizeTop + mainButtons.clientHeight >
     document.documentElement.clientHeight - 20

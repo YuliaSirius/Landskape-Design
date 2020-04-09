@@ -9,18 +9,13 @@ import { plot } from './plotsSizes.js';
 import { ways } from './leftButtons.js';
 import { addedPath } from './leftButtons.js';
 import { showDemo } from './templates.js';
-
-
-export let currentUser = [];
-if (localStorage.key('user')) {
-  currentUser = JSON.parse(localStorage.getItem('user'));
-}
+import { restoreInfo } from './ajax.js';
 
 
 export function createTopMenu() {
   let divPaint = document.createElement('div');
   divPaint.className = 'divPaint';
-  document.body.prepend(divPaint);
+  document.getElementById('IPage').prepend(divPaint);
   createButton('getPlot', getPlot);
   createButton('new', showNew);
   createButton('save', save);
@@ -31,12 +26,16 @@ export function createTopMenu() {
   createButton('forward');
   createButton('delete', deleteObj);
   createButton('saveImage', savePicture);
-  createLogo(divPaint);
+  // createLogo(divPaint);
   createButton('person', loginAccount);
   createLoginName();
   createButton('templates', showDemo);
-}
 
+}
+export let currentUser = [];
+if (localStorage.key('user')) {
+  currentUser = JSON.parse(localStorage.getItem('user'));
+}
 
 function createLoginName() {
   let divPaint = document.querySelector('.divPaint');
@@ -54,7 +53,7 @@ function save() {
   storeInfo();
 }
 
-function showNew() {
+export function showNew() {
   ways.splice(ways[0], ways.length);
   drawnObjects.splice(drawnObjects[0], drawnObjects.length);
   plot.W = 0;
@@ -115,7 +114,6 @@ function deleteObj() {
   if (addedObj) {
     drawnObjects.splice(drawnObjects.indexOf(addedObj), 1);
   }
-  console.log(addedPath);
   if (addedPath) {
     ways.splice(ways.indexOf(addedPath), 1);
   }
@@ -202,9 +200,7 @@ function loginAccount() {
     let mail = form.email.value;
     let password = form.password.value;
     let login = form.login.value;
-
     currentUser = { login: login, mail: mail, password: password };
-
     let currUser = JSON.stringify(currentUser);
     localStorage.setItem('user', currUser);
     createLoginName();
@@ -236,12 +232,12 @@ function loginAccount() {
   }
 }
 
-function createLogo(div) {
-  let logo = document.createElement('p');
-  logo.className = 'logo';
-  logo.textContent = 'Landskape Design';
-  div.append(logo);
-}
+// function createLogo(div) {
+//   let logo = document.createElement('p');
+//   logo.className = 'logo';
+//   logo.textContent = 'Landskape Design';
+//   div.append(logo);
+// }
 function lock() {
   // let container = canvas.createElement('div');
   // container.id = 'personal-container';

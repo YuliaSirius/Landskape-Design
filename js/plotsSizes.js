@@ -1,14 +1,13 @@
 import { canvas } from './landscape.js';
 import { reDraw } from './landscape.js';
 
-
 export let plot = {
   W: 0,
   H: 0,
   X: 0,
   Y: 0,
   ratio: 0.65,
-  scale: 30
+  scale: 30,
 };
 
 export function getPlot() {
@@ -31,11 +30,11 @@ function getPlotSizes() {
   showCover();
 
   container.style.display = 'block';
-  // form.elements.width.focus();
+  form.elements.width.focus();
   form.width.value = '';
   form.height.value = '';
 
-  form.onsubmit = function() {
+  form.onsubmit = function () {
     plotsWidth = form.width.value;
     plotsHeight = form.height.value;
     if (plotsWidth === '' || plotsHeight === '') return false;
@@ -55,7 +54,8 @@ function getPlotSizes() {
       Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale);
     plot.Y =
       plot.scale *
-      Math.floor((canvas.height - plot.H* plot.scale) / 2 / plot.scale)  + plot.scale;
+        Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale) +
+      plot.scale;
     complete();
     return false;
   };
@@ -66,11 +66,11 @@ function getPlotSizes() {
     hideCover();
     reDraw();
   }
-  form.cancel.onclick = function() {
+  form.cancel.onclick = function () {
     complete();
   };
 
-  document.onkeydown = function(e) {
+  document.onkeydown = function (e) {
     if (e.key === 'Escape') {
       complete();
     }
@@ -79,14 +79,14 @@ function getPlotSizes() {
   let lastElem = form.elements[form.elements.length - 1];
   let firstElem = form.elements[0];
 
-  lastElem.onkeydown = function(e) {
+  lastElem.onkeydown = function (e) {
     if (e.key == 'Tab' && !e.shiftKey) {
       firstElem.focus();
       return false;
     }
   };
 
-  firstElem.onkeydown = function(e) {
+  firstElem.onkeydown = function (e) {
     if (e.key == 'Tab' && e.shiftKey) {
       lastElem.focus();
       return false;
@@ -95,9 +95,12 @@ function getPlotSizes() {
 }
 
 function showCover() {
+let divHtml = document.getElementById('IPage')
+
+
   let coverDiv = document.createElement('div');
   coverDiv.id = 'cover-div';
-  document.body.append(coverDiv);
+  divHtml.append(coverDiv);
 }
 
 function hideCover() {
