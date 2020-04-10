@@ -25,7 +25,6 @@ function resize(canvas) {
 function startMain() {
   canvas = document.getElementById('cnv');
   cnt = canvas.getContext('2d');
-
   createTopMenu();
   resize(canvas);
   restoreInfo();
@@ -34,6 +33,7 @@ function startMain() {
 }
 
 function resizeCanvas() {
+  console.log( canvas.width)
   resize(canvas);
   reDraw();
 }

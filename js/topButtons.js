@@ -26,9 +26,9 @@ export function createTopMenu() {
   createButton('forward');
   createButton('delete', deleteObj);
   createButton('saveImage', savePicture);
-  // createLogo(divPaint);
+
   createButton('person', loginAccount);
-  // createLoginName();
+  createLoginName();
   createButton('templates', showDemo);
 
 }
@@ -232,12 +232,6 @@ function loginAccount() {
   }
 }
 
-// function createLogo(div) {
-//   let logo = document.createElement('p');
-//   logo.className = 'logo';
-//   logo.textContent = 'Landskape Design';
-//   div.append(logo);
-// }
 function lock() {
   // let container = canvas.createElement('div');
   // container.id = 'personal-container';

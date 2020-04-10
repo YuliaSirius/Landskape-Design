@@ -327,6 +327,8 @@ function readReady(callresult) {
         let drawnObject = item.userInfo;
         for (let key in drawnObject) {
           if (key === 'pl') {
+
+            
             plot.X = drawnObject[key].X;
             plot.Y = drawnObject[key].Y;
             plot.W = drawnObject[key].W;
