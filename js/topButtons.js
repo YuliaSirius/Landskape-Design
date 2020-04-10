@@ -28,7 +28,7 @@ export function createTopMenu() {
   createButton('saveImage', savePicture);
   // createLogo(divPaint);
   createButton('person', loginAccount);
-  createLoginName();
+  // createLoginName();
   createButton('templates', showDemo);
 
 }
