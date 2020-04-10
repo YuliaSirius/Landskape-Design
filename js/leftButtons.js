@@ -7,7 +7,7 @@ import { reDraw } from './landscape.js';
 export let image = {
   smooth: { quantity: 8, added: false, width: 40, height: 40 },
   angular: { quantity: 18, added: false, width: 40, height: 40 },
-  trees: { quantity: 25, added: false, width: 60, height: 60 },
+  trees: { quantity: 19, added: false, width: 60, height: 60 },
   shrubs: { quantity: 16, added: false, width: 40, height: 40 },
   grass: { quantity: 5, added: false, width: 40, height: 40 },
   flowers: { quantity: 6, added: false, width: 60, height: 60 },

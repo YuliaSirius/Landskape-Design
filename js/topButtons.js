@@ -11,7 +11,6 @@ import { addedPath } from './leftButtons.js';
 import { showDemo } from './templates.js';
 import { restoreInfo } from './ajax.js';
 
-
 export function createTopMenu() {
   let divPaint = document.createElement('div');
   divPaint.className = 'divPaint';
@@ -24,11 +23,9 @@ export function createTopMenu() {
   createButton('unlock', unlock);
   createButton('delete', deleteObj);
   createButton('saveImage', savePicture);
-
   createButton('person', loginAccount);
   createLoginName();
   createButton('templates', showDemo);
-
 }
 export let currentUser = [];
 if (localStorage.key('user')) {
@@ -83,7 +80,7 @@ function createButton(name, handler, left) {
     person.append(loginWindow);
     let exit = document.createElement('div');
     exit.className = 'exit';
-    exit.textContent = 'Log out';
+    exit.textContent = 'Log off';
     loginWindow.append(exit);
     exit.addEventListener('mousedown', LogOff);
   }
@@ -91,20 +88,21 @@ function createButton(name, handler, left) {
 
 function LogOff() {
   localStorage.removeItem('user');
-  currentUser = []
+  currentUser = [];
   window.location.reload();
+    let loginWindow = document.querySelector('.loginWindow');
+  loginWindow.style.display = 'none';
 }
 
 function savePicture() {
-  removeSelection()
-   reDraw();
+  removeSelection();
+  reDraw();
   let dataURL = canvas.toDataURL();
   let link = document.createElement('a');
   link.href = dataURL;
   link.download = 'landskape.jpg';
   link.click();
 }
-
 
 function deleteObj() {
   if (!drawnObjects[0] && !ways[0]) return;
@@ -114,7 +112,7 @@ function deleteObj() {
   if (addedPath) {
     ways.splice(ways.indexOf(addedPath), 1);
   }
-   reDraw();
+  reDraw();
   addedObj === null;
   addedPath === null;
 }
@@ -125,7 +123,7 @@ function deleteAll() {
   ways.splice(ways[0], ways.length);
   reDraw();
 }
-
+let isError;
 function loginAccount() {
   if (Object.keys(currentUser).length !== 0) {
     let loginWindow = document.querySelector('.loginWindow');
@@ -197,16 +195,22 @@ function loginAccount() {
     let mail = form.email.value;
     let password = form.password.value;
     let login = form.login.value;
-    currentUser = { login: login, mail: mail, password: password };
-    let currUser = JSON.stringify(currentUser);
-    localStorage.setItem('user', currUser);
-    createLoginName();
-    restoreInfo();
-    complete();
-    return false;
+    let arr = [form.email, form.password, form.login];
+    isError = false;
+    validateValue(arr);
+
+    if (!isError) {
+      currentUser = { login: login, mail: mail, password: password };
+      let currUser = JSON.stringify(currentUser);
+      localStorage.setItem('user', currUser);
+      createLoginName();
+      restoreInfo();
+      complete();
+    }
+       return false;
   };
 
-  function complete() {
+    function complete() {
     container.style.display = 'none';
     document.onkeydown = null;
     hideCover();
@@ -226,6 +230,17 @@ function loginAccount() {
 
   function hideCover() {
     document.getElementById('cover-div').remove();
+  }
+}
+
+function validateValue(arr) {
+  for (let item of arr) {
+    if (!item.value) {
+           item.style.borderColor = 'red';
+      isError = true;
+    } else {
+      item.style.border = 'none';
+    }
   }
 }
 

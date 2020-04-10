@@ -45,16 +45,18 @@ function getPlotSizes() {
       plot.W = plotsWidth;
       plot.H = plotsHeight;
     }
-    plot.scale = Math.min(
+    plot.scale =  Math.floor(Math.min(
       (canvas.width * plot.ratio) / plot.W,
       (canvas.height * plot.ratio) / plot.H
-    );
+    ));
     plot.X =
       plot.scale *
-      Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale) + canvas.width*0.04;
+      Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale);
+    // + canvas.width*0.04;
     plot.Y =
       plot.scale *
-        Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale) + canvas.height*0.04
+      Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale);
+    //  + canvas.height*0.04
 
     complete();
     return false;
@@ -95,8 +97,7 @@ function getPlotSizes() {
 }
 
 function showCover() {
-let divHtml = document.getElementById('IPage')
-
+  let divHtml = document.getElementById('IPage');
 
   let coverDiv = document.createElement('div');
   coverDiv.id = 'cover-div';

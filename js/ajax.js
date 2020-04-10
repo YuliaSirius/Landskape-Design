@@ -4,7 +4,6 @@ import { addImage } from './landscape.js';
 import { reDraw } from './landscape.js';
 import { drawPath } from './leftButtons.js';
 import { plot } from './plotsSizes.js';
-// import { currentUser } from './topButtons.js';
 import { currentUser } from './topButtons.js';
 import { ways } from './leftButtons.js';
 

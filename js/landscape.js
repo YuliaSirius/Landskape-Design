@@ -7,6 +7,7 @@ import { ways } from './leftButtons.js';
 import { addEventMouseEnter } from './leftButtons.js';
 import { createTopMenu } from './topButtons.js';
 import { addListener } from './events.js';
+import { addHtml } from './partOfHtml.js';
 import { restoreInfo } from './ajax.js';
 export let canvas;
 export let cnt;
@@ -17,7 +18,6 @@ function resize(canvas) {
   if (canvas.width != displayWidth || canvas.height != displayHeight) {
     canvas.width = displayWidth;
     canvas.height = displayHeight;
-    // cnt.fillStyle = 'rgba(202, 200, 200, 0.2)';
     cnt.fillRect(0, 0, canvas.width, canvas.height);
   }
 }
@@ -34,18 +34,20 @@ function startMain() {
 
 function resizeCanvas() {
   resize(canvas);
-  plot.scale = Math.min(
-    (canvas.width * plot.ratio) / plot.W,
-    (canvas.height * plot.ratio) / plot.H
+  plot.scale = Math.floor(
+    Math.min(
+      (canvas.width * plot.ratio) / plot.W,
+      (canvas.height * plot.ratio) / plot.H
+    )
   );
   plot.X =
     plot.scale *
-      Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale) +
-    canvas.width * 0.04;
+    Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale);
+  //  + canvas.width * 0.04;
   plot.Y =
     plot.scale *
-      Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale) +
-    canvas.height * 0.04;
+    Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale);
+  // +    canvas.height * 0.04;
   reDraw();
 }
 
@@ -177,9 +179,6 @@ function drawArrows(x, y, length, height, step) {
 
 export function addImage(sub, number, X, Y, W, H, angle) {
   let img = new Image();
-
-  // let Xshare = X
-  // let Yshare = Y
   img.Xshare = X;
   img.Yshare = Y;
   img.width = W;
@@ -265,9 +264,12 @@ export function getObj(e) {
       currObj = item;
       addedObj = item;
 
-      item.elemLeft = x - item.X;
-      item.elemTop = y - item.Y;
-
+      // item.elemLeft = x - item.X;
+      // item.elemTop = y - item.Y;
+      
+      item.elemLeft = x - item.Xshare * canvas.width;
+      item.elemTop = y - item.Yshare * canvas.height;
+     
       if (!item.rotation) {
         cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
         cnt.strokeStyle = 'rgb(68, 109, 245)';
@@ -565,11 +567,8 @@ function moveObj(e) {
     let my = e.clientY - currObj.Y - currObj.H / 2;
     currObj.angle = Math.atan2(my, mx) + Math.PI / 2;
   } else {
-    // currObj.X = e.offsetX - currObj.elemLeft; // - offX;
-    // currObj.Y = e.offsetY - currObj.elemTop; //- offY;
-    currObj.Yshare =(e.offsetY - currObj.elemLeft) / canvas.height;
-    currObj.Xshare = (e.offsetX - currObj.elemLeft) / canvas.width;
-
+      currObj.Yshare = Math.floor(((e.offsetY - currObj.elemTop) / canvas.height)*1000)/1000;
+    currObj.Xshare = Math.floor(((e.offsetX - currObj.elemLeft) / canvas.width)*1000)/1000;
   }
   reDraw();
 
@@ -647,7 +646,7 @@ function switchToStateFromURLHash() {
       startMain();
       break;
     case 'About':
-      page.innerHTML = `<div class="about_text"><h3>Description of the application</h3><p>
+      page.innerHTML = `<div class="about_text"><h3>Application description</h3><p>
        The application allows you to create an individual plan of a suburban area
        indicating the boundaries of the site (fence), the arrangement of capital
         structures (house, bathhouse, garage, outbuildings, pool, gazebo, etc.). 
@@ -679,155 +678,6 @@ function switchToAboutPage() {
 }
 
 switchToStateFromURLHash();
-
-function addHtml() {
-  let tegs = `<div class="buttons">
-  <div class="button">
-    <img class="btn_img" src="./img/tree.png" alt="plants" />
-    <span>PLANTS</span>
-    <div class="submenu">
-      <div class="catalog">
-        <img class="btn_img" src="./img/tree.png" alt="tree" />
-        <span>Trees</span>
-        <div class="sub" id="trees"> </div>
-      </div>
-      <div class="catalog">
-        <img class="btn_img" src="./img/shrub.png" alt="shrub" />
-        <span>Shrubs</span>
-        <div class="sub" id="shrubs"> </div>
-      </div>
-
-      <div class="catalog">
-        <img class="btn_img" src="./img/flower.png" alt="flower" />
-        <span>Flowers</span>
-        <div class="sub" id="flowers"> </div>
-      </div>
-      <div class="catalog">
-        <img class="btn_img" src="./img/grass.png" alt="grass" />
-        <span>Grass</span>
-      </div>
-    </div>
-  </div>
-  <div class="button">
-    <img class="btn_img" src="./img/stone.png" alt="stone" />
-    <span>STONES</span>
-    <div class="submenu">
-      <div class="catalog">
-        <img class="btn_img" src="./img/smooth/6.png" alt="stone" />
-        <span>Smooth</span>
-        <div class="sub" id="smooth">
-        </div>
-      </div>
-      <div class="catalog">
-        <img class="btn_img" src="./img/angular/2.png" alt="stone" />
-        <span>Angular</span>
-        <div class="sub" id="angular">
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="button">
-    <img class="btn_img" src="./img/paving.png" alt="paving" />
-    <div class="submenu">
-      <div class="catalog">
-        <img class="btn_img" src="./img/pathWay.png" alt="path" />
-        <span>Pathway</span>
-        <div class="sub" id="pathway"> </div>
-      </div>
-      <div class="catalog">
-        <img class="btn_img" src="./img/pavement.png" alt="pavement" />
-        <span>Pavement</span>
-        <div class="sub" id="pavement"> </div>
-      </div>
-    </div>
-    <span>PAVING</span>
-  </div>
-  <div class="button">
-    <img class="btn_img" src="./img/ponds.png" alt="ponds" />
-    <span>PONDS</span>
-    <div class="submenu">
-      <div class="catalog">
-        <img class="btn_img" src="./img/ponds.png" alt="ponds" />
-        <span>Ponds</span>
-        <div class="sub" id="ponds"> </div>
-      </div>
-      <div class="catalog">
-        <img class="btn_img" src="./img/pools.png" alt="pools" />
-        <span>Pools</span>
-        <div class="sub" id="pools"> </div>
-      </div>
-      <div class="catalog">
-        <img class="btn_img" src="./img/fountains.png" alt="fountains" />
-        <span>Fountains</span>
-        <div class="sub" id="fountains"> </div>
-      </div>
-    </div>
-  </div>
-  <div class="button">
-    <img class="btn_img" src="./img/furniture.png" alt="furniture" />
-    <span>LEISURE</span>
-    <div class="submenu">
-      <div class="catalog">
-        <img class="btn_img" src="./img/furniture.png" alt="cars" />
-        <span>Furniture</span>
-        <div class="sub" id="furniture"> </div>
-      </div>
-    </div>
-  </div>
-  <div class="button">
-    <img class="btn_img" src="./img/cars.png" alt="cars" />
-    <span>VEHICLES</span>
-    <div class="submenu">
-      <div class="catalog">
-        <img class="btn_img" src="./img/cars.png" alt="cars" />
-        <span>Cars</span>
-        <div class="sub" id="cars"> </div>
-      </div>
-      <div class="catalog">
-        <img class="btn_img" src="./img/scooters.png" alt="scooters" />
-        <span>Scooters</span>
-        <div class="sub" id="scooters"> </div>
-      </div>
-    </div>
-  </div>
-  <div class="button">
-    <img class="btn_img" src="./img/house.png" alt="house" />
-    <span>HOUSE</span>
-    <div class="submenu">
-      <div class="catalog">
-        <img class="btn_img" src="./img/house.png" alt="houses" />
-        <span>Houses</span>
-        <div class="sub" id="houses"> </div>
-      </div>
-      <div class="catalog">
-        <img class="btn_img" src="./img/house.png" alt="stairs" />
-        <span>Stairs</span>
-        <div class="sub" id="stairs"> </div>
-      </div>
-    </div>
-  </div>
-</div>
-<canvas id="cnv"></canvas>
-<div id="prompt-form-container">
-  <form id="prompt-form">
-    <div id="prompt-message">Enter the sizes of your plot:</div>
-    <div>
-      <label for="width">length:</label>
-      <label>
-        <input id="width" name="width" type="text" autocomplete="off" />
-        (m)</label>
-    </div>
-    <div>
-      <label for="height">width:</label>
-      <label><input id="height" name="height" type="text" autocomplete="off" />
-        (m)</label>
-    </div>
-    <input type="submit" value=" OK " />
-    <input type="button" name="cancel" value=" Cancel " />
-  </form>
-</div>`;
-  return tegs;
-}
 
 function showPictures() {
   setTimeout(() => show(count), 2000);

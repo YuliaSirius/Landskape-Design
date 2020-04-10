@@ -53,7 +53,7 @@ canvas {
   margin: 1vh 0;
   width: 3.8vmax;
   height: 3.8vmax;
-   cursor: pointer;
+  cursor: pointer;
   position: relative;
   align-items: center;
   box-sizing: border-box;
@@ -91,25 +91,21 @@ canvas {
   background-color: rgba(147, 193, 252, 0.7);
   left: 3.7vmax;
   top: 0;
-  /* border: 1px solid yellow; */
   z-index: -10;
   border-radius: 3px;
   border: 1px solid rgba(0, 0, 0, 0.5);
-  /* box-sizing: border-box; */
 }
 
 .buttons .submenu .sub {
   display: none;
   flex-wrap: wrap;
-  padding: 5px 15px;
-  width: 212px;
-  /* max-height: 300px; */
+  padding: 1vmax;
+  width: 14.4vmax;
   cursor: pointer;
   position: absolute;
   background-color: rgba(147, 193, 252, 0.7);
   left: 3.6vmax;
   top: 0;
-  /* border: 1px solid yellow; */
   z-index: -10;
   border-radius: 3px;
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -118,7 +114,6 @@ canvas {
 
 .button span {
   text-align: center;
-  /* line-height: 12px; */
 }
 
 .btn_img {
@@ -163,7 +158,7 @@ body {
 
 #prompt-form-container:before {
   display: inline-block;
-  height: 100%;
+  height: 100vh;
   content: '';
   vertical-align: middle;
 }
@@ -173,18 +168,17 @@ body {
   top: 0;
   left: 0;
   z-index: 9000;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: gray;
   opacity: 0.3;
 }
 
 #prompt-form input[type='text'] {
-  width: 40px;
-}
+  width: 8vw;
+} 
 
-
-/* #prompt-form input {
+ /* #prompt-form input {
   margin-top: 10px;
   height: 18px;
 } */
@@ -200,7 +194,7 @@ body {
   position: absolute;
   padding: 10px;
   background-color: rgba(147, 193, 252, 0.7);
-  top: 6vh;
+  top: 3.1vmax;
   border-radius: 3px;
   border: 1px solid rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
@@ -225,8 +219,8 @@ body {
   left: 0;
   z-index: 9999;
   display: none;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   text-align: center;
 }
 
@@ -238,10 +232,10 @@ body {
 }
 
 #person-form {
-  font-size: 18px;
+  font-size: 1.7vw;
   display: inline-block;
-  padding: 15px 15px 15px 70px;
-  width: 300px;
+  padding: 1vw 1vw 1vw 9vw;
+  width: 22vw;
   border: 2px solid blue;
   background: rgb(197, 211, 255) url(../img/person.png) no-repeat 10% 50%;
   background-size: 15%;
@@ -250,9 +244,16 @@ body {
 
 #person-form input,
 #prompt-form input {
-  margin-top: 10px;
-  padding: 3px 15px;
+  margin-top: 1vh;
+  padding: 0.4vh 2.5vh;
+
 }
+#mail, #login, #Pass {
+  width: 12vw;
+
+}
+
+
 
 .logo,
 .about {
@@ -310,8 +311,9 @@ body {
 .imgDemo2:hover,
 .imgDemo3:hover,
 .imgDemo4:hover {
-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
+
 .readme {
   display: flex;
   flex-direction: column;
@@ -385,11 +387,11 @@ box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   width: 17vw;
   position: fixed;
   left: 5%;
-  top:  8vmax;
+  top: 8vmax;
   z-index: 5;
   animation: my-animation 2s;
   transform: translateZ(0);
- }
+}
 
 .picture2 {
   width: 17vw;
@@ -443,3 +445,5 @@ box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 .templates {
   margin-left: 15vw;
 }
+
+
