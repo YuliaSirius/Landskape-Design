@@ -53,8 +53,12 @@ let mouseDownImage = function (e) {
       }
     }
     let angle = 0;
-    let X = canvas.width / 2;
-    let Y = canvas.height / 2;
+
+    let X = 0.5;
+    let Y = 0.5;
+
+    // let X = canvas.width / 2;
+    // let Y = canvas.height / 2;
     let W = image[this.id].width;
     let H = image[this.id].height;
     if (this.id === 'pathway') {

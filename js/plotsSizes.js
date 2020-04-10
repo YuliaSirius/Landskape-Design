@@ -51,11 +51,11 @@ function getPlotSizes() {
     );
     plot.X =
       plot.scale *
-      Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale);
+      Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale) + canvas.width*0.04;
     plot.Y =
       plot.scale *
-        Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale) +
-      plot.scale;
+        Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale) + canvas.height*0.04
+
     complete();
     return false;
   };

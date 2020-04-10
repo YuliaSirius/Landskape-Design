@@ -25,16 +25,27 @@ function resize(canvas) {
 function startMain() {
   canvas = document.getElementById('cnv');
   cnt = canvas.getContext('2d');
-  createTopMenu();
   resize(canvas);
+  createTopMenu();
   restoreInfo();
   window.addEventListener('resize', resizeCanvas);
   reDraw();
 }
 
 function resizeCanvas() {
-  console.log( canvas.width)
   resize(canvas);
+  plot.scale = Math.min(
+    (canvas.width * plot.ratio) / plot.W,
+    (canvas.height * plot.ratio) / plot.H
+  );
+  plot.X =
+    plot.scale *
+      Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale) +
+    canvas.width * 0.04;
+  plot.Y =
+    plot.scale *
+      Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale) +
+    canvas.height * 0.04;
   reDraw();
 }
 
@@ -116,7 +127,7 @@ function drawArrows(x, y, length, height, step) {
   cnt.lineTo(x - offset, y - 25);
   cnt.stroke();
   cnt.fillStyle = 'blue';
-  cnt.font = '600 16px Arial';
+  cnt.font = '600 2.3vmin Arial';
   cnt.textBaseline = 'middle';
   cnt.textAlign = 'center';
   let amountY = 0;
@@ -166,8 +177,11 @@ function drawArrows(x, y, length, height, step) {
 
 export function addImage(sub, number, X, Y, W, H, angle) {
   let img = new Image();
-  img.X = X;
-  img.Y = Y;
+
+  // let Xshare = X
+  // let Yshare = Y
+  img.Xshare = X;
+  img.Yshare = Y;
   img.width = W;
   img.height = H;
   img.angle = angle;
@@ -185,6 +199,8 @@ export function addImage(sub, number, X, Y, W, H, angle) {
 }
 
 function drawImage(img) {
+  img.X = img.Xshare * canvas.width;
+  img.Y = img.Yshare * canvas.height;
   if (!img.selectX) {
     img.selectX = 1;
   }
@@ -549,8 +565,11 @@ function moveObj(e) {
     let my = e.clientY - currObj.Y - currObj.H / 2;
     currObj.angle = Math.atan2(my, mx) + Math.PI / 2;
   } else {
-    currObj.X = e.offsetX - currObj.elemLeft; // - offX;
-    currObj.Y = e.offsetY - currObj.elemTop; //- offY;
+    // currObj.X = e.offsetX - currObj.elemLeft; // - offX;
+    // currObj.Y = e.offsetY - currObj.elemTop; //- offY;
+    currObj.Yshare =(e.offsetY - currObj.elemLeft) / canvas.height;
+    currObj.Xshare = (e.offsetX - currObj.elemLeft) / canvas.width;
+
   }
   reDraw();
 
@@ -610,7 +629,6 @@ let pictures = {
   2: './img/img1.png',
   3: './img/img1.png',
   4: './img/img1.png',
-
 };
 function switchToStateFromURLHash() {
   let URLHash = window.location.hash;
@@ -812,7 +830,6 @@ function addHtml() {
 }
 
 function showPictures() {
-  
   setTimeout(() => show(count), 2000);
 }
 function show(key) {

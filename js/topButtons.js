@@ -22,8 +22,6 @@ export function createTopMenu() {
   createButton('deleteAll', deleteAll);
   createButton('lock', lock);
   createButton('unlock', unlock);
-  createButton('back', goBack);
-  createButton('forward');
   createButton('delete', deleteObj);
   createButton('saveImage', savePicture);
 
@@ -107,7 +105,6 @@ function savePicture() {
   link.click();
 }
 
-function goBack() {}
 
 function deleteObj() {
   if (!drawnObjects[0] && !ways[0]) return;

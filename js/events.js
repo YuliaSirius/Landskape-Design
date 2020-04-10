@@ -146,15 +146,15 @@ function moveButtons() {
   let submenu = [...document.querySelectorAll('.submenu')];
   for (let item of submenu) {
     if (sizeLeft > document.documentElement.clientWidth / 2) {
-      item.style.left = '-92px';
-    } else item.style.left = '58px';
+      item.style.left = '-6.3vmax';
+    } else item.style.left = '3.7vmax;';
   }
 
   let sub = [...document.querySelectorAll('.sub')];
   for (let item of sub) {
     if (sizeLeft > document.documentElement.clientWidth / 2) {
       item.style.left = '-212px';
-    } else item.style.left = '58px';
+    } else item.style.left = '3.7vmax';
   }
 }
 
