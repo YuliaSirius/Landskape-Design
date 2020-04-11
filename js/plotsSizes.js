@@ -7,7 +7,7 @@ export let plot = {
   X: 0,
   Y: 0,
   ratio: 0.65,
-  scale: 30,
+  // scale: 30,
 };
 
 export function getPlot() {
@@ -45,19 +45,21 @@ function getPlotSizes() {
       plot.W = plotsWidth;
       plot.H = plotsHeight;
     }
-    plot.scale =  Math.floor(Math.min(
-      (canvas.width * plot.ratio) / plot.W,
-      (canvas.height * plot.ratio) / plot.H
-    ));
+    plot.scale = Math.floor(
+      Math.min(
+        (canvas.width * plot.ratio) / plot.W,
+        (canvas.height * plot.ratio) / plot.H
+      )
+    );
     plot.X =
-      plot.scale *
-      Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale);
-    // + canvas.width*0.04;
-    plot.Y =
-      plot.scale *
-      Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale);
-    //  + canvas.height*0.04
-
+    Math.floor(
+      ((canvas.width - plot.W * plot.scale) / 2 / canvas.width) * 1000
+    ) / 1000;
+  plot.Y =
+    Math.floor(
+      ((canvas.height - plot.H * plot.scale) / 2 / canvas.height) * 1000
+    ) / 1000;
+  
     complete();
     return false;
   };

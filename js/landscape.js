@@ -26,6 +26,7 @@ function startMain() {
   canvas = document.getElementById('cnv');
   cnt = canvas.getContext('2d');
   resize(canvas);
+  plot.scale = canvas.width / 40;
   createTopMenu();
   restoreInfo();
   window.addEventListener('resize', resizeCanvas);
@@ -34,20 +35,25 @@ function startMain() {
 
 function resizeCanvas() {
   resize(canvas);
-  plot.scale = Math.floor(
-    Math.min(
-      (canvas.width * plot.ratio) / plot.W,
-      (canvas.height * plot.ratio) / plot.H
-    )
-  );
+  if (plot.W === 0) {
+    plot.scale = canvas.width / 40;
+  } else {
+    plot.scale = Math.floor(
+      Math.min(
+        (canvas.width * plot.ratio) / plot.W,
+        (canvas.height * plot.ratio) / plot.H
+      )
+    );
+  }
   plot.X =
-    plot.scale *
-    Math.floor((canvas.width - plot.W * plot.scale) / 2 / plot.scale);
-  //  + canvas.width * 0.04;
+    Math.floor(
+      ((canvas.width - plot.W * plot.scale) / 2 / canvas.width) * 1000
+    ) / 1000;
   plot.Y =
-    plot.scale *
-    Math.floor((canvas.height - plot.H * plot.scale) / 2 / plot.scale);
-  // +    canvas.height * 0.04;
+    Math.floor(
+      ((canvas.height - plot.H * plot.scale) / 2 / canvas.height) * 1000
+    ) / 1000;
+
   reDraw();
 }
 
@@ -60,12 +66,12 @@ export function reDraw() {
   drawLines(plot.scale);
   drawPlot();
 
-  if (plot.X) {
+  if (plot.W) {
     drawArrows(
-      plot.X,
-      plot.Y,
-      plot.X + plot.W * plot.scale,
-      plot.Y + plot.H * plot.scale,
+      plot.X * canvas.width,
+      plot.Y * canvas.height,
+      plot.X * canvas.width + plot.W * plot.scale,
+      plot.Y * canvas.height + plot.H * plot.scale,
       plot.scale
     );
   }
@@ -98,11 +104,21 @@ export function drawPlot() {
   if (!grass) {
     grass = new Image();
     grass.onload = function () {
-      createPlot(plot.X, plot.Y, plot.W * plot.scale, plot.H * plot.scale);
+      createPlot(
+        plot.X * canvas.width,
+        plot.Y * canvas.height,
+        plot.W * plot.scale,
+        plot.H * plot.scale
+      );
     };
     grass.src = `./img/grassbg.png`;
   } else {
-    createPlot(plot.X, plot.Y, plot.W * plot.scale, plot.H * plot.scale);
+    createPlot(
+      plot.X * canvas.width,
+      plot.Y * canvas.height,
+      plot.W * plot.scale,
+      plot.H * plot.scale
+    );
   }
 }
 
@@ -117,7 +133,7 @@ function createPlot(X, Y, W, H) {
 }
 
 function drawArrows(x, y, length, height, step) {
-  let offset = 35;
+  let offset = Math.min(0.05 * canvas.width, 0.05 * canvas.height);
   cnt.strokeStyle = 'blue';
   cnt.lineWidth = 1;
   cnt.beginPath();
@@ -129,7 +145,7 @@ function drawArrows(x, y, length, height, step) {
   cnt.lineTo(x - offset, y - 25);
   cnt.stroke();
   cnt.fillStyle = 'blue';
-  cnt.font = '600 2.3vmin Arial';
+  cnt.font = '600 2.4vmin Arial';
   cnt.textBaseline = 'middle';
   cnt.textAlign = 'center';
   let amountY = 0;
@@ -181,8 +197,8 @@ export function addImage(sub, number, X, Y, W, H, angle) {
   let img = new Image();
   img.Xshare = X;
   img.Yshare = Y;
-  img.width = W;
-  img.height = H;
+  img.widthShare = W;
+  img.heightShare = H;
   img.angle = angle;
   img.s = sub;
   img.num = number;
@@ -200,6 +216,8 @@ export function addImage(sub, number, X, Y, W, H, angle) {
 function drawImage(img) {
   img.X = img.Xshare * canvas.width;
   img.Y = img.Yshare * canvas.height;
+  img.width = img.widthShare * plot.scale;
+  img.height = img.heightShare * plot.scale;
   if (!img.selectX) {
     img.selectX = 1;
   }
@@ -266,10 +284,10 @@ export function getObj(e) {
 
       // item.elemLeft = x - item.X;
       // item.elemTop = y - item.Y;
-      
+
       item.elemLeft = x - item.Xshare * canvas.width;
       item.elemTop = y - item.Yshare * canvas.height;
-     
+
       if (!item.rotation) {
         cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
         cnt.strokeStyle = 'rgb(68, 109, 245)';
@@ -567,8 +585,10 @@ function moveObj(e) {
     let my = e.clientY - currObj.Y - currObj.H / 2;
     currObj.angle = Math.atan2(my, mx) + Math.PI / 2;
   } else {
-      currObj.Yshare = Math.floor(((e.offsetY - currObj.elemTop) / canvas.height)*1000)/1000;
-    currObj.Xshare = Math.floor(((e.offsetX - currObj.elemLeft) / canvas.width)*1000)/1000;
+    currObj.Yshare =
+      Math.floor(((e.offsetY - currObj.elemTop) / canvas.height) * 1000) / 1000;
+    currObj.Xshare =
+      Math.floor(((e.offsetX - currObj.elemLeft) / canvas.width) * 1000) / 1000;
   }
   reDraw();
 

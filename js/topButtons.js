@@ -56,7 +56,7 @@ export function showNew() {
   plot.X = 0;
   plot.Y = 0;
   plot.ratio = 0.65;
-  plot.scale = 30;
+  // plot.scale = 30;
   reDraw();
 }
 
@@ -90,7 +90,7 @@ function LogOff() {
   localStorage.removeItem('user');
   currentUser = [];
   window.location.reload();
-    let loginWindow = document.querySelector('.loginWindow');
+  let loginWindow = document.querySelector('.loginWindow');
   loginWindow.style.display = 'none';
 }
 
@@ -124,12 +124,12 @@ function deleteAll() {
   reDraw();
 }
 let isError;
+
 function loginAccount() {
   if (Object.keys(currentUser).length !== 0) {
     let loginWindow = document.querySelector('.loginWindow');
     loginWindow.style.display = 'block';
-    // let person = document.querySelector('.person');
-    // document.addEventListener('mousemove', showLoginWindow);
+    document.addEventListener('mousedown', hideLoginWindow);
 
     //    function showLoginWindow(e) {
     //   loginWindow.style.display = 'block';
@@ -144,7 +144,24 @@ function loginAccount() {
     // }
     return;
   }
+  createForm();
+  showCover();
+  document.onkeydown = function (e) {
+    if (e.key === 'Escape') {
+      complete();
+    }
+  };
+}
 
+function hideLoginWindow(e) {
+  let loginWindow = document.querySelector('.loginWindow');
+  if (e.target.className !== 'loginWindow' && e.target.className !== 'exit') {
+    loginWindow.style.display = 'none';
+    document.removeEventListener('mousedown', hideLoginWindow);
+  }
+}
+
+function createForm() {
   let container = document.createElement('div');
   container.id = 'personal-container';
   document.body.prepend(container);
@@ -183,60 +200,44 @@ function loginAccount() {
   submit.type = 'submit';
   submit.value = 'Enter';
   form.append(submit);
-  showCover();
+
+  let cancel = document.createElement('input');
+  cancel.type = 'button';
+  cancel.value = 'Cancel';
+  cancel.name = 'cancel';
+  form.append(cancel);
 
   container.style.display = 'block';
   form.elements.email.focus();
   form.email.value = '';
   form.password.value = '';
   form.login.value = '';
-
-  form.onsubmit = function () {
-    let mail = form.email.value;
-    let password = form.password.value;
-    let login = form.login.value;
-    let arr = [form.email, form.password, form.login];
-    isError = false;
-    validateValue(arr);
-
-    if (!isError) {
-      currentUser = { login: login, mail: mail, password: password };
-      let currUser = JSON.stringify(currentUser);
-      localStorage.setItem('user', currUser);
-      createLoginName();
-      restoreInfo();
-      complete();
-    }
-       return false;
-  };
-
-    function complete() {
-    container.style.display = 'none';
-    document.onkeydown = null;
-    hideCover();
+  form.addEventListener('submit', submitValue);
+  form.cancel.addEventListener('click', complete);
+}
+function submitValue(e) {
+  let form = document.getElementById('person-form');
+  let mail = form.email.value;
+  let password = form.password.value;
+  let login = form.login.value;
+  let arr = [form.email, form.password, form.login];
+  isError = false;
+  validateValue(arr);
+  if (!isError) {
+    currentUser = { login: login, mail: mail, password: password };
+    let currUser = JSON.stringify(currentUser);
+    localStorage.setItem('user', currUser);
+    createLoginName();
+    restoreInfo();
+    complete();
   }
-
-  document.onkeydown = function (e) {
-    if (e.key === 'Escape') {
-      complete();
-    }
-  };
-
-  function showCover() {
-    let coverDiv = document.createElement('div');
-    coverDiv.id = 'cover-div';
-    document.body.append(coverDiv);
-  }
-
-  function hideCover() {
-    document.getElementById('cover-div').remove();
-  }
+  e.preventDefault();
 }
 
 function validateValue(arr) {
   for (let item of arr) {
     if (!item.value) {
-           item.style.borderColor = 'red';
+      item.style.borderColor = 'red';
       isError = true;
     } else {
       item.style.border = 'none';
@@ -244,15 +245,31 @@ function validateValue(arr) {
   }
 }
 
+function complete() {
+  let container = document.getElementById('personal-container');
+  container.style.display = 'none';
+  document.onkeydown = null;
+  hideCover();
+}
+
+function hideCover() {
+  let form = document.getElementById('person-form');
+  document.getElementById('cover-div').remove();
+  form.cancel.removeEventListener('click', complete);
+}
+
+function showCover() {
+  let coverDiv = document.createElement('div');
+  coverDiv.id = 'cover-div';
+  document.body.append(coverDiv);
+}
+
 function lock() {
-  // let container = canvas.createElement('div');
-  // container.id = 'personal-container';
-  // document.prepend(container);
-  // container.style.display = 'block';
+let canvas = document.querySelector('canvas')
+canvas.style.pointerEvents = 'none';
+
 }
 function unlock() {
-  // let container = document.createElement('div');
-  // container.id = 'personal-container';
-  // document.body.prepend(container);
-  // container.style.display = 'none';
+  let canvas = document.querySelector('canvas')
+  canvas.style.pointerEvents = 'auto';
 }

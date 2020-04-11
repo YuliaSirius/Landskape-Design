@@ -1,4 +1,3 @@
-
 export function addHtml() {
     let tegs = `<div class="buttons">
     <div class="button">

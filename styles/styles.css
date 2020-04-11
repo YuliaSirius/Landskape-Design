@@ -244,9 +244,8 @@ body {
 
 #person-form input,
 #prompt-form input {
-  margin-top: 1vh;
+  margin: 1vh 0.5vw 0;
   padding: 0.4vh 2.5vh;
-
 }
 #mail, #login, #Pass {
   width: 12vw;

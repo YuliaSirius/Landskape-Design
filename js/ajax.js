@@ -166,7 +166,7 @@ function lockGetReady(callresult) {
 
     function updateData() {
       let i = 1;
-      let info = { pl: {} };
+      let info = {};
       info.pl = plot;
       info.path = ways;
       for (let item of drawnObjects) {
@@ -175,8 +175,8 @@ function lockGetReady(callresult) {
           item.num,
           item.Xshare,
           item.Yshare,
-          item.W,
-          item.H,
+          item.widthShare ,
+          item.heightShare,
           item.angle,
         ];
         i++;
@@ -189,23 +189,23 @@ function lockGetReady(callresult) {
         console.log('строка пустая');
       } else {
         for (let item of allUsers) {
-          console.log(item.userData);
-          if (JSON.stringify(item.userData) === JSON.stringify(currentUser)) {
+          if (JSON.stringify(item.userData) !== JSON.stringify(currentUser)) {
+            is = false;
+          } else {
             item.userInfo = user.userInfo;
             is = true;
-          } else {
-            is = false;
+            break;
           }
         }
+        addNewUser();
       }
-      ggg();
-      function ggg() {
+
+      function addNewUser() {
         if (!is) {
           allUsers.push(user);
         }
       }
 
-      // }
 
       $.ajax({
         url: ajaxHandlerScript,
@@ -231,27 +231,27 @@ function updateReady(callresult) {
 let savedObjects = [];
 
 export function restoreInfo() {
-      $.ajax({
-        url: ajaxHandlerScript,
-        type: 'POST',
-        cache: false,
-        dataType: 'json',
-        data: { f: 'READ', n: stringName },
-        success: readReady,
-        error: errorHandler,
-      });
+  $.ajax({
+    url: ajaxHandlerScript,
+    type: 'POST',
+    cache: false,
+    dataType: 'json',
+    data: { f: 'READ', n: stringName },
+    success: readReady,
+    error: errorHandler,
+  });
 }
 
 function readReady(callresult) {
   if (callresult.error != undefined) alert(callresult.error);
   else if (callresult.result != '') {
     savedObjects = JSON.parse(callresult.result);
+
     for (let item of savedObjects) {
       if (JSON.stringify(item.userData) === JSON.stringify(currentUser)) {
         let drawnObject = item.userInfo;
         for (let key in drawnObject) {
           if (key === 'pl') {
-
             plot.X = drawnObject[key].X;
             plot.Y = drawnObject[key].Y;
             plot.W = drawnObject[key].W;

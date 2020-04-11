@@ -53,14 +53,13 @@ let mouseDownImage = function (e) {
       }
     }
     let angle = 0;
+      let X =
+      Math.floor((canvas.width - image[this.id].width) / 2) / canvas.width;
+     let Y =
+      Math.floor((canvas.height - image[this.id].height) / 2) / canvas.height;
 
-    let X = 0.5;
-    let Y = 0.5;
-
-    // let X = canvas.width / 2;
-    // let Y = canvas.height / 2;
-    let W = image[this.id].width;
-    let H = image[this.id].height;
+    let W =image[this.id].width / plot.scale;
+    let H = image[this.id].height / plot.scale;
     if (this.id === 'pathway') {
       drawPathWay(number);
     } else addImage(this.id, number, X, Y, W, H, angle);
