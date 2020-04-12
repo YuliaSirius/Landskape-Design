@@ -19,18 +19,14 @@ export function addHtml() {
           <span>Flowers</span>
           <div class="sub" id="flowers"> </div>
         </div>
-        <div class="catalog">
-          <img class="btn_img" src="./img/grass.png" alt="grass" />
-          <span>Grass</span>
-        </div>
-      </div>
+             </div>
     </div>
     <div class="button">
       <img class="btn_img" src="./img/stone.png" alt="stone" />
       <span>STONES</span>
       <div class="submenu">
         <div class="catalog">
-          <img class="btn_img" src="./img/smooth/6.png" alt="stone" />
+          <img class="btn_img" src="./img/smooth.png" alt="stone" />
           <span>Smooth</span>
           <div class="sub" id="smooth">
           </div>
@@ -116,12 +112,7 @@ export function addHtml() {
           <span>Houses</span>
           <div class="sub" id="houses"> </div>
         </div>
-        <div class="catalog">
-          <img class="btn_img" src="./img/house.png" alt="stairs" />
-          <span>Stairs</span>
-          <div class="sub" id="stairs"> </div>
-        </div>
-      </div>
+             </div>
     </div>
   </div>
   <canvas id="cnv"></canvas>

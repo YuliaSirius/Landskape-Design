@@ -1,6 +1,5 @@
 import { showNew } from './topButtons.js';
 import { ways } from './leftButtons.js';
-// import { cnt } from './landscape.js';
 import { canvas } from './landscape.js';
 import { reDraw } from './landscape.js';
 import { plot } from './plotsSizes.js';
@@ -8,9 +7,7 @@ import { addImage } from './landscape.js';
 import { resizeCanvas } from './landscape.js';
 import { drawPath } from './leftButtons.js';
 
-
 let addedDemo;
-
 export function showDemo() {
   if (addedDemo) return;
   createImages();
@@ -18,21 +15,18 @@ export function showDemo() {
   createReadme();
   addedDemo = true;
 }
-
 function createImages() {
   for (let i = 1; i < 5; i++) {
     let img = document.createElement('img');
-    img.src = `./img/img${i}.png`;
+    img.src = `./img/img${i}.jpg`;
     img.className = `imgDemo${i}`;
     document.body.append(img);
   }
 }
-
 let offsetX;
 let offsetY;
 let scaleX;
 let scaleY;
-
 function start() {
   requestAnimationFrame(tick);
   offsetX = 0;
@@ -40,7 +34,6 @@ function start() {
   scaleX = 1;
   scaleY = 1;
 }
-
 function tick() {
   scaleX += 0.03;
   scaleY += 0.03;
@@ -56,7 +49,6 @@ function tick() {
   update();
   requestAnimationFrame(tick);
 }
-
 function update() {
   // элементы не вынесены на отдельный GPU-слой, потому что после того, как
   // для них сработает css-анимация transform, браузер вынесет их на отдельный слой самостоятельно
@@ -69,7 +61,6 @@ function update() {
   let img4 = document.querySelector('.imgDemo4');
   img4.style.transform = `matrix(${scaleX}, 0, 0, ${scaleY},${offsetX},${-offsetY})`;
 }
-
 function createReadme() {
   let readme = document.createElement('div');
   readme.className = `readme`;
@@ -96,7 +87,6 @@ function showReadme() {
   document.addEventListener('click', chooseTemplate);
   isAdded = false;
 }
-
 function hideReadme() {
   let readme = document.querySelector('.readme');
   readme.remove();
@@ -107,7 +97,6 @@ function hideReadme() {
   addedDemo = false;
   document.onkeydown = null;
 }
-
 function chooseTemplate(e) {
   let img1 = document.querySelector('.imgDemo1');
   let img2 = document.querySelector('.imgDemo2');
@@ -127,12 +116,9 @@ function chooseTemplate(e) {
     showTemplate(count);
   } else return;
 }
-
 let ajaxHandlerScript = 'https://fe.it-academy.by/AjaxStringStorage2.php';
-
 function showTemplate(count) {
   showNew();
-  resizeCanvas()
   if (isAdded) return;
   $.ajax({
     url: ajaxHandlerScript,
@@ -143,7 +129,6 @@ function showTemplate(count) {
     success: readReady,
     error: errorHandler,
   });
-
   function readReady(callresult) {
     if (callresult.error != undefined) alert(callresult.error);
     else if (callresult.result != '') {
@@ -151,14 +136,12 @@ function showTemplate(count) {
       drawTemplates(savedTemplates[count]);
     }
   }
-
   function errorHandler(jqXHR, statusStr, errorStr) {
     alert(statusStr + ' ' + errorStr);
   }
 }
-
 function drawTemplates(template) {
- 
+  resizeCanvas()
      for (let key in template) {
     if (key === 'pl') {
       plot.X = template[key].X;
@@ -197,6 +180,5 @@ function drawTemplates(template) {
   }
   isAdded = true;
   hideReadme();
- 
-  reDraw();
+   reDraw();
 }

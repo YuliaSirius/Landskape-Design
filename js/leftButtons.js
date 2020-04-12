@@ -5,13 +5,13 @@ import { cnt } from './landscape.js';
 import { reDraw } from './landscape.js';
 
 export let image = {
-  smooth: { quantity: 8, added: false, width: 40, height: 40 },
-  angular: { quantity: 18, added: false, width: 40, height: 40 },
+  smooth: { quantity: 4, added: false, width: 40, height: 40 },
+  angular: { quantity: 12, added: false, width: 40, height: 40 },
   trees: { quantity: 19, added: false, width: 60, height: 60 },
-  shrubs: { quantity: 16, added: false, width: 40, height: 40 },
+  shrubs: { quantity: 14, added: false, width: 40, height: 40 },
   grass: { quantity: 5, added: false, width: 40, height: 40 },
   flowers: { quantity: 6, added: false, width: 60, height: 60 },
-  cars: { quantity: 3, added: false, width: 122.5, height: 55 },
+  cars: { quantity: 4, added: false, width: 122.5, height: 55 },
   furniture: { quantity: 4, added: false, width: 100, height: 100 },
   scooters: { quantity: 2, added: false, width: 50, height: 30 },
   paving: { quantity: 10, added: false, width: 100, height: 100 },
@@ -55,7 +55,6 @@ let mouseDownImage = function (e) {
     let angle = 0;
     let X = 0.5;
     let Y = 0.5;
-
     let W = image[this.id].width / plot.scale;
     let H = image[this.id].height / plot.scale;
     if (this.id === 'pathway') {
@@ -100,7 +99,6 @@ function mouseLeave() {
 }
 
 export let ways = [];
-
 let path = {};
 
 function drawPathWay(number) {

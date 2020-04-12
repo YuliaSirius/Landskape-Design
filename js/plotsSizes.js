@@ -7,9 +7,7 @@ export let plot = {
   X: 0,
   Y: 0,
   ratio: 0.65,
-  // scale: 30,
-};
-
+ };
 export function getPlot() {
   if (!plot.W) {
     getPlotSizes();
@@ -20,20 +18,16 @@ export function getPlot() {
     }
   }
 }
-
 function getPlotSizes() {
   let plotsWidth;
   let plotsHeight;
   let form = document.getElementById('prompt-form');
   let container = document.getElementById('prompt-form-container');
-
   showCover();
-
   container.style.display = 'block';
   form.elements.width.focus();
   form.width.value = '';
   form.height.value = '';
-
   form.onsubmit = function () {
     plotsWidth = form.width.value;
     plotsHeight = form.height.value;
@@ -59,11 +53,9 @@ function getPlotSizes() {
     Math.floor(
       ((canvas.height - plot.H * plot.scale) / 2 / canvas.height) * 1000
     ) / 1000;
-  
-    complete();
+      complete();
     return false;
   };
-
   function complete() {
     container.style.display = 'none';
     document.onkeydown = null;
@@ -73,23 +65,19 @@ function getPlotSizes() {
   form.cancel.onclick = function () {
     complete();
   };
-
   document.onkeydown = function (e) {
     if (e.key === 'Escape') {
       complete();
     }
   };
-
   let lastElem = form.elements[form.elements.length - 1];
   let firstElem = form.elements[0];
-
   lastElem.onkeydown = function (e) {
     if (e.key == 'Tab' && !e.shiftKey) {
       firstElem.focus();
       return false;
     }
   };
-
   firstElem.onkeydown = function (e) {
     if (e.key == 'Tab' && e.shiftKey) {
       lastElem.focus();
@@ -97,15 +85,12 @@ function getPlotSizes() {
     }
   };
 }
-
 function showCover() {
   let divHtml = document.getElementById('IPage');
-
   let coverDiv = document.createElement('div');
   coverDiv.id = 'cover-div';
   divHtml.append(coverDiv);
 }
-
 function hideCover() {
   document.getElementById('cover-div').remove();
 }

@@ -1,13 +1,9 @@
-import { zoom } from './events.js';
-import { zoomStep } from './events.js';
 import { plot } from './plotsSizes.js';
-// import { image } from './leftButtons.js';
 import { drawPath } from './leftButtons.js';
 import { ways } from './leftButtons.js';
 import { addEventMouseEnter } from './leftButtons.js';
-// import { currentUser } from './topButtons.js';
 import { createTopMenu } from './topButtons.js';
-import { addListener } from './events.js';
+import { addListener } from './moveButtons.js';
 import { addHtml } from './partOfHtml.js';
 import { restoreInfo } from './ajax.js';
 import { getPlot } from './plotsSizes.js';
@@ -15,15 +11,6 @@ import { getPlot } from './plotsSizes.js';
 export let canvas;
 export let cnt;
 
-function resize(canvas) {
-  let displayWidth = canvas.clientWidth;
-  let displayHeight = canvas.clientHeight;
-  if (canvas.width != displayWidth || canvas.height != displayHeight) {
-    canvas.width = displayWidth;
-    canvas.height = displayHeight;
-    cnt.fillRect(0, 0, canvas.width, canvas.height);
-  }
-}
 let start;
 function startMain() {
   start = true;
@@ -61,6 +48,16 @@ export function resizeCanvas() {
   reDraw();
 }
 
+function resize(canvas) {
+  let displayWidth = canvas.clientWidth;
+  let displayHeight = canvas.clientHeight;
+  if (canvas.width != displayWidth || canvas.height != displayHeight) {
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
+    cnt.fillRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
 export let drawnObjects = [];
 
 export function reDraw() {
@@ -68,7 +65,6 @@ export function reDraw() {
   cnt.fillStyle = 'rgba(202, 200, 200, 0.2)';
   drawLines(plot.scale);
   drawPlot();
-
   if (plot.W) {
     drawArrows(
       plot.X * canvas.width,
@@ -124,7 +120,6 @@ export function drawPlot() {
     );
   }
 }
-
 function createPlot(X, Y, W, H) {
   let patt = cnt.createPattern(grass, 'repeat');
   cnt.beginPath();
@@ -134,7 +129,6 @@ function createPlot(X, Y, W, H) {
   cnt.lineWidth = 3;
   cnt.strokeRect(X, Y, W, H);
 }
-
 function drawArrows(x, y, length, height, step) {
   let offset = Math.min(0.05 * canvas.width, 0.05 * canvas.height);
   cnt.strokeStyle = 'blue';
@@ -153,7 +147,6 @@ function drawArrows(x, y, length, height, step) {
   cnt.textAlign = 'center';
   let amountY = 0;
   let amountX = 0;
-
   for (let i = x; i <= length + 0.9 * step; i += step * 5) {
     cnt.beginPath();
     cnt.moveTo(i, height + offset - 4);
@@ -162,13 +155,11 @@ function drawArrows(x, y, length, height, step) {
     cnt.fillText(`${amountX}`, i, height + offset + 20);
     amountX += 5;
   }
-
   cnt.beginPath();
   cnt.moveTo(length, height + offset - 4);
   cnt.lineTo(length, height + offset + 4);
   cnt.stroke();
   cnt.fillText(`${plot.W}`, length, height + offset + 20);
-
   for (let i = height; i >= y - 0.9 * step; i -= step * 5) {
     cnt.beginPath();
     cnt.moveTo(x - offset - 4, i);
@@ -177,13 +168,11 @@ function drawArrows(x, y, length, height, step) {
     cnt.fillText(`${amountY}`, x - offset - 25, i);
     amountY += 5;
   }
-
   cnt.beginPath();
   cnt.moveTo(x - offset - 4, y);
   cnt.lineTo(x - offset + 4, y);
   cnt.stroke();
   cnt.fillText(`${plot.H}`, x - offset - 25, y);
-
   cnt.beginPath();
   cnt.moveTo(length + 25, height + offset + 4);
   cnt.lineTo(length + 25, height + offset - 4);
@@ -195,7 +184,6 @@ function drawArrows(x, y, length, height, step) {
   cnt.lineTo(x - offset, y - 25 - 14);
   cnt.fill();
 }
-
 export function addImage(sub, number, X, Y, W, H, selectX, selectY, angle) {
   let img = new Image();
   img.Xshare = X;
@@ -207,7 +195,6 @@ export function addImage(sub, number, X, Y, W, H, selectX, selectY, angle) {
   img.num = number;
   img.selectX = Math.floor(selectX * 1000) / 1000;
   img.selectY = Math.floor(selectY * 1000) / 1000;
-
   if (!img.selectX) {
     img.selectX = 1;
   }
@@ -223,7 +210,6 @@ export function addImage(sub, number, X, Y, W, H, selectX, selectY, angle) {
   });
   img.src = `./img/${sub}/${number}.png`;
 }
-
 function drawImage(img) {
   if (!plot.W) {
     getPlot();
@@ -233,7 +219,6 @@ function drawImage(img) {
     img.W = img.widthShare * plot.scale * img.selectX;
     img.H = img.heightShare * plot.scale * img.selectY;
   }
-
   let rotateX = img.X + img.W / 2;
   let rotateY = img.Y + img.H / 2;
   cnt.save();
@@ -242,7 +227,6 @@ function drawImage(img) {
   cnt.translate(-rotateX, -rotateY);
   cnt.drawImage(img, img.X, img.Y, img.W, img.H);
   cnt.restore();
-
   cnt.fillStyle = 'rgba(0, 0, 0,0)';
   let rx = img.W / 2;
   let ry = img.H / 2;
@@ -263,7 +247,6 @@ function drawImage(img) {
   img.template.lineTo(XY[0], XY[1]);
   img.template.closePath();
   cnt.fill(img.template);
-
   canvas.addEventListener('mousedown', getObj);
 }
 
@@ -277,14 +260,12 @@ let bottom;
 let right;
 let left;
 let rotation;
-
 export let addedObj;
 export function getObj(e) {
   let x = e.offsetX;
   let y = e.offsetY;
   currObj = null;
   addedObj = null;
-  // mousedown on objects
   for (let item of drawnObjects) {
     if (cnt.isPointInPath(item.template, x, y)) {
       currObj = item;
@@ -318,7 +299,6 @@ export function getObj(e) {
     cnt.fillStyle = 'rgba(0, 0, 0, 0)';
     cnt.strokeStyle = 'rgba(0, 0, 0, 0)';
     drawSelect(item);
-    // mousedown on select
     if (cnt.isPointInPath(item.bottomRight, x, y)) {
       bottomRight = true;
     }
@@ -350,7 +330,6 @@ export function getObj(e) {
   canvas.addEventListener('mousemove', moveObj);
   canvas.addEventListener('mouseup', letGoObj);
 }
-
 function getX1Y1(image, rx, ry) {
   let x1 =
     image.X +
@@ -365,7 +344,6 @@ function getX1Y1(image, rx, ry) {
   let coord = [x1, y1];
   return coord;
 }
-
 function drawSelect(image) {
   let size = 7;
   cnt.lineWidth = 1;
@@ -475,7 +453,6 @@ function drawSelect(image) {
   cnt.lineTo(XY[0], XY[1]);
   cnt.stroke();
 }
-
 function drawSize(image) {
   let ry = image.Y - (image.Y + image.H / 2) - 25;
   let rx = image.W / 2 - image.W / 2;
@@ -483,9 +460,7 @@ function drawSize(image) {
   cnt.textBaseline = 'middle';
   cnt.textAlign = 'center';
   cnt.font = '500 13px Arial';
-  // Bottom number
   cnt.fillText(`${(image.W / plot.scale).toFixed(1)} m`, XY[0], XY[1]);
-  // Left number
   rx = image.X - image.W - (image.X - image.W / 2) - 25;
   ry = image.H / 2 - image.H / 2;
   XY = getX1Y1(image, rx, ry);
@@ -494,7 +469,6 @@ function drawSize(image) {
 
 let eX = [];
 let eY = [];
-
 function moveObj(e) {
   eX.push(e.offsetX);
   eY.push(e.offsetY);
@@ -510,7 +484,6 @@ function moveObj(e) {
   let max = 550;
   let min = 25;
   let index = 0.02;
-
   if (topLeft) {
     if (
       (e.offsetX < eX[0] || e.offsetY < eY[0]) &&
@@ -596,14 +569,12 @@ function moveObj(e) {
       (plot.W * plot.scale);
   }
   reDraw();
-
   cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
   cnt.strokeStyle = 'rgb(68, 109, 245)';
   drawSelect(currObj);
   cnt.fillStyle = 'black';
   drawSize(currObj);
 }
-
 function letGoObj() {
   reDraw();
   if (currObj) {
@@ -625,7 +596,6 @@ function letGoObj() {
   rotation = false;
   canvas.removeEventListener('mousemove', moveObj);
 }
-
 export function removeSelection() {
   topLeft = false;
   topRight = false;
@@ -637,7 +607,6 @@ export function removeSelection() {
   left = false;
   rotation = false;
 }
-
 ////////  SPA
 let logo = document.querySelector('.logo');
 logo.addEventListener('click', switchToMainPage);
@@ -649,10 +618,10 @@ window.onhashchange = switchToStateFromURLHash;
 let count = 1;
 let SPAState = {};
 let pictures = {
-  1: './img/img1.png',
-  2: './img/img2.png',
-  3: './img/img3.png',
-  4: './img/img4.png',
+  1: './img/img1.jpg',
+  2: './img/img2.jpg',
+  3: './img/img3.jpg',
+  4: './img/img4.jpg',
 };
 function switchToStateFromURLHash() {
   let URLHash = window.location.hash;

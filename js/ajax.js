@@ -9,12 +9,11 @@ import { ways } from './leftButtons.js';
 
 let ajaxHandlerScript = 'https://fe.it-academy.by/AjaxStringStorage2.php';
 let updatePassword;
-
 let stringName = 'MIASNIKOVA_LANDSKAPE_OBJECTS';
+
 
 let savedLast;
 let allUsers = [];
-
 export function storeInfo() {
   updatePassword = Math.random();
   $.ajax({
@@ -27,7 +26,6 @@ export function storeInfo() {
     error: errorHandler,
   });
 }
-
 function lockGetReady(callresult) {
   if (callresult.error != undefined) alert(callresult.error);
   else {
@@ -40,17 +38,14 @@ function lockGetReady(callresult) {
       success: read,
       error: errorHandler,
     });
-
     function read() {
       if (callresult.error != undefined) alert(callresult.error);
       else if (callresult.result != '') {
         savedLast = JSON.parse(callresult.result);
         allUsers = savedLast;
-        // allUsers = [];
         updateData();
       }
     }
-
     function updateData() {
       let i = 1;
       let info = {};
@@ -86,13 +81,11 @@ function lockGetReady(callresult) {
         }
         addNewUser();
       }
-
       function addNewUser() {
         if (!is) {
           allUsers.push(user);
         }
       }
-
       $.ajax({
         url: ajaxHandlerScript,
         type: 'POST',
@@ -113,9 +106,7 @@ function lockGetReady(callresult) {
 function updateReady(callresult) {
   if (callresult.error != undefined) alert(callresult.error);
 }
-
 let savedObjects = [];
-
 export function restoreInfo() {
     $.ajax({
       url: ajaxHandlerScript,
@@ -127,7 +118,6 @@ export function restoreInfo() {
       error: errorHandler,
     });
 }
-
 function readReady(callresult) {
   if (callresult.error != undefined) alert(callresult.error);
   else if (callresult.result != '') {
@@ -172,7 +162,6 @@ function readReady(callresult) {
   }
   reDraw();
 }
-
 function errorHandler(jqXHR, statusStr, errorStr) {
   alert(statusStr + ' ' + errorStr);
 }

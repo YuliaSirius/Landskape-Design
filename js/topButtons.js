@@ -10,8 +10,6 @@ import { ways } from './leftButtons.js';
 import { addedPath } from './leftButtons.js';
 import { showDemo } from './templates.js';
 import { restoreInfo } from './ajax.js';
-import { cnt } from './landscape.js';
-
 
 export function createTopMenu() {
   let divPaint = document.createElement('div');
@@ -33,22 +31,11 @@ export let currentUser = [];
 if (localStorage.key('user')) {
   currentUser = JSON.parse(localStorage.getItem('user'));
 }
-
-function createLoginName() {
-  let divPaint = document.querySelector('.divPaint');
-  let person = divPaint.querySelector('.person');
-  let p = document.createElement('p');
-  p.textContent = currentUser.login;
-  p.className = 'login';
-  person.after(p);
-}
-
 function save() {
   if (Object.keys(currentUser).length === 0) {
        loginAccount();
   } else storeInfo();
 }
-
 export function showNew() {
   ways.splice(ways[0], ways.length);
   drawnObjects.splice(drawnObjects[0], drawnObjects.length);
@@ -59,7 +46,6 @@ export function showNew() {
   plot.ratio = 0.65;
   reDraw();
 }
-
 function createButton(name, handler, left) {
   let divPaint = document.querySelector('.divPaint');
   let div = document.createElement('div');
@@ -72,7 +58,6 @@ function createButton(name, handler, left) {
   img.src = `./img/${name}.png`;
   img.alt = name;
   div.prepend(img);
-
   if (name === 'person') {
     let loginWindow = document.createElement('div');
     loginWindow.className = 'loginWindow';
@@ -85,7 +70,6 @@ function createButton(name, handler, left) {
     exit.addEventListener('mousedown', LogOff);
   }
 }
-
 function LogOff() {
   localStorage.removeItem('user');
   currentUser = [];
@@ -93,7 +77,6 @@ function LogOff() {
   let loginWindow = document.querySelector('.loginWindow');
   loginWindow.style.display = 'none';
 }
-
 function savePicture() {
   removeSelection();
   reDraw();
@@ -103,7 +86,6 @@ function savePicture() {
   link.download = 'landskape.jpg';
   link.click();
 }
-
 function deleteObj() {
   if (!drawnObjects[0] && !ways[0]) return;
   if (addedObj) {
@@ -116,7 +98,6 @@ function deleteObj() {
   addedObj === null;
   addedPath === null;
 }
-
 function deleteAll() {
   if (!drawnObjects[0] && !ways[0]) return;
   drawnObjects.splice(drawnObjects[0], drawnObjects.length);
@@ -124,7 +105,6 @@ function deleteAll() {
   reDraw();
 }
 let isError;
-
 function loginAccount() {
   if (Object.keys(currentUser).length !== 0) {
     let loginWindow = document.querySelector('.loginWindow');
@@ -140,7 +120,6 @@ function loginAccount() {
     }
   };
 }
-
 function hideLoginWindow(e) {
   let loginWindow = document.querySelector('.loginWindow');
   if (e.target.className !== 'loginWindow' && e.target.className !== 'exit') {
@@ -148,7 +127,6 @@ function hideLoginWindow(e) {
     document.removeEventListener('mousedown', hideLoginWindow);
   }
 }
-
 function createForm() {
   let container = document.createElement('div');
   container.id = 'personal-container';
@@ -162,39 +140,33 @@ function createForm() {
   text.textContent = 'Enter your login information:';
   let inputs = document.createElement('div');
   form.append(inputs);
-
   let email = document.createElement('input');
   email.name = 'email';
   email.id = 'mail';
   email.type = 'email';
   email.placeholder = 'Email';
   inputs.append(email);
-
   let login = document.createElement('input');
   login.name = 'login';
   login.id = 'login';
   login.type = 'text';
   login.placeholder = 'Login';
   inputs.append(login);
-
   let password = document.createElement('input');
   password.name = 'password';
   password.id = 'Pass';
   password.type = 'text';
   password.placeholder = 'Password';
   inputs.append(password);
-
   let submit = document.createElement('input');
   submit.type = 'submit';
   submit.value = 'Enter';
   form.append(submit);
-
   let cancel = document.createElement('input');
   cancel.type = 'button';
   cancel.value = 'Cancel';
   cancel.name = 'cancel';
   form.append(cancel);
-
   container.style.display = 'block';
   form.elements.email.focus();
   form.email.value = '';
@@ -216,12 +188,12 @@ function submitValue(e) {
     let currUser = JSON.stringify(currentUser);
     localStorage.setItem('user', currUser);
     createLoginName();
+    showNew()
     restoreInfo()
       complete();
   }
   e.preventDefault();
 }
-
 function validateValue(arr) {
   for (let item of arr) {
     if (!item.value) {
@@ -232,26 +204,30 @@ function validateValue(arr) {
     }
   }
 }
-
+function createLoginName() {
+  let divPaint = document.querySelector('.divPaint');
+  let person = divPaint.querySelector('.person');
+  let p = document.createElement('p');
+  p.textContent = currentUser.login;
+  p.className = 'login';
+  person.after(p);
+}
 function complete() {
   let container = document.getElementById('personal-container');
   container.style.display = 'none';
   document.onkeydown = null;
   hideCover();
 }
-
 function hideCover() {
   let form = document.getElementById('person-form');
   document.getElementById('cover-div').remove();
   form.cancel.removeEventListener('click', complete);
 }
-
 function showCover() {
   let coverDiv = document.createElement('div');
   coverDiv.id = 'cover-div';
   document.body.append(coverDiv);
 }
-
 function lock() {
   let canvas = document.querySelector('canvas');
   canvas.style.pointerEvents = 'none';
