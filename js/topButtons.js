@@ -216,7 +216,7 @@ function submitValue(e) {
     let currUser = JSON.stringify(currentUser);
     localStorage.setItem('user', currUser);
     createLoginName();
-    storeInfo()
+    restoreInfo()
       complete();
   }
   e.preventDefault();

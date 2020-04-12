@@ -10,6 +10,8 @@ import { createTopMenu } from './topButtons.js';
 import { addListener } from './events.js';
 import { addHtml } from './partOfHtml.js';
 import { restoreInfo } from './ajax.js';
+import { getPlot } from './plotsSizes.js';
+
 export let canvas;
 export let cnt;
 
@@ -68,8 +70,7 @@ export let drawnObjects = [];
 export function reDraw() {
   cnt.clearRect(0, 0, canvas.width, canvas.height);
   cnt.fillStyle = 'rgba(202, 200, 200, 0.2)';
-  cnt.fillRect(0, 0, canvas.width, canvas.height);
-  drawLines(plot.scale);
+    drawLines(plot.scale);
   drawPlot();
 
   if (plot.W) {
@@ -228,10 +229,15 @@ export function addImage(sub, number, X, Y, W, H, selectX, selectY, angle) {
 }
 
 function drawImage(img) {
-  img.X = img.Xshare * canvas.width;
-  img.Y = img.Yshare * canvas.height;
-  img.W = img.widthShare * plot.scale * img.selectX;
-  img.H = img.heightShare * plot.scale * img.selectY;
+  if (!plot.W) {
+    getPlot();
+  } else {
+    img.X = plot.X * canvas.width + img.Xshare * plot.W * plot.scale;
+    img.Y = plot.Y * canvas.height + img.Yshare * plot.H * plot.scale;
+    img.W = img.widthShare * plot.scale * img.selectX;
+    img.H = img.heightShare * plot.scale * img.selectY;
+  }
+
   let rotateX = img.X + img.W / 2;
   let rotateY = img.Y + img.H / 2;
   cnt.save();
@@ -263,7 +269,6 @@ function drawImage(img) {
   cnt.fill(img.template);
 
   canvas.addEventListener('mousedown', getObj);
-  canvas.addEventListener("touchstart", getObj);
 }
 
 let currObj;
@@ -288,14 +293,9 @@ export function getObj(e) {
     if (cnt.isPointInPath(item.template, x, y)) {
       currObj = item;
       addedObj = item;
-
-      // item.elemLeft = x - item.X;
-      // item.elemTop = y - item.Y;
-
-      item.elemLeft = x - item.Xshare * canvas.width;
-      item.elemTop = y - item.Yshare * canvas.height;
-
-      if (!item.rotation) {
+      item.elemLeft = x - item.X;
+       item.elemTop = y - item.Y;
+          if (!item.rotation) {
         cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
         cnt.strokeStyle = 'rgb(68, 109, 245)';
         drawSelect(item);
@@ -353,9 +353,6 @@ export function getObj(e) {
   }
   canvas.addEventListener('mousemove', moveObj);
   canvas.addEventListener('mouseup', letGoObj);
-  canvas.addEventListener("touchmove", moveObj);
-  canvas.addEventListener("touchend", letGoObj);
-  canvas.addEventListener("touchcancel", letGoObj);
 }
 
 function getX1Y1(image, rx, ry) {
@@ -596,9 +593,11 @@ function moveObj(e) {
     currObj.angle = Math.atan2(my, mx) + Math.PI / 2;
   } else {
     currObj.Yshare =
-      Math.floor(((e.offsetY - currObj.elemTop) / canvas.height) * 1000) / 1000;
+      (e.offsetY - currObj.elemTop - plot.Y * canvas.height) /
+      (plot.H * plot.scale);
     currObj.Xshare =
-      Math.floor(((e.offsetX - currObj.elemLeft) / canvas.width) * 1000) / 1000;
+      (e.offsetX - currObj.elemLeft - plot.X * canvas.width) /
+      (plot.W * plot.scale);
   }
   reDraw();
 
@@ -673,16 +672,16 @@ function switchToStateFromURLHash() {
       page.innerHTML = addHtml();
       addListener();
       addEventMouseEnter();
-if (!start) {
-  startMain();
-} else {
-  canvas = document.getElementById('cnv');
-  cnt = canvas.getContext('2d');
-  resize(canvas);
-  createTopMenu();
-  reDraw()
-}
-        break;
+      if (!start) {
+        startMain();
+      } else {
+        canvas = document.getElementById('cnv');
+        cnt = canvas.getContext('2d');
+        resize(canvas);
+        createTopMenu();
+        reDraw();
+      }
+      break;
     case 'About':
       page.innerHTML = `<div class="about_text"><h3>Application description</h3><p>
        The application allows you to create an individual plan of a suburban area
