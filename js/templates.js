@@ -1,10 +1,14 @@
 import { showNew } from './topButtons.js';
 import { ways } from './leftButtons.js';
-import { drawnObjects } from './landscape.js';
+import { cnt } from './landscape.js';
+import { canvas } from './landscape.js';
 import { reDraw } from './landscape.js';
 import { plot } from './plotsSizes.js';
 import { addImage } from './landscape.js';
+import { resizeCanvas } from './landscape.js';
 import { drawPath } from './leftButtons.js';
+
+
 let addedDemo;
 
 export function showDemo() {
@@ -26,7 +30,6 @@ function createImages() {
 
 let offsetX;
 let offsetY;
-// let angle;
 let scaleX;
 let scaleY;
 
@@ -34,7 +37,6 @@ function start() {
   requestAnimationFrame(tick);
   offsetX = 0;
   offsetY = 0;
-  // angle = 0;
   scaleX = 1;
   scaleY = 1;
 }
@@ -44,7 +46,6 @@ function tick() {
   scaleY += 0.03;
   offsetX += 6.5;
   offsetY += 2.8;
-  //   angle += 5;
   if (
     offsetX > document.documentElement.clientWidth - 50 * scaleX - 100 ||
     offsetY > document.documentElement.clientHeight - 50 * scaleY - 100
@@ -130,6 +131,8 @@ function chooseTemplate(e) {
 let ajaxHandlerScript = 'https://fe.it-academy.by/AjaxStringStorage2.php';
 
 function showTemplate(count) {
+  showNew();
+  resizeCanvas()
   if (isAdded) return;
   $.ajax({
     url: ajaxHandlerScript,
@@ -155,8 +158,8 @@ function showTemplate(count) {
 }
 
 function drawTemplates(template) {
-  showNew();
-  for (let key in template) {
+ 
+     for (let key in template) {
     if (key === 'pl') {
       plot.X = template[key].X;
       plot.Y = template[key].Y;
@@ -189,5 +192,6 @@ function drawTemplates(template) {
   }
   isAdded = true;
   hideReadme();
+ 
   reDraw();
 }

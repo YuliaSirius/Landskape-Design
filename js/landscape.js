@@ -15,7 +15,7 @@ import { getPlot } from './plotsSizes.js';
 export let canvas;
 export let cnt;
 
-function resize(canvas) {
+ function resize(canvas) {
   let displayWidth = canvas.clientWidth;
   let displayHeight = canvas.clientHeight;
   if (canvas.width != displayWidth || canvas.height != displayHeight) {
@@ -32,16 +32,12 @@ function startMain() {
   resize(canvas);
   plot.scale = canvas.width / 40;
   createTopMenu();
-  // if(currentUser[0]) {
   restoreInfo();
-
-  // }
-
   window.addEventListener('resize', resizeCanvas);
   reDraw();
 }
 
-function resizeCanvas() {
+export function resizeCanvas() {
   resize(canvas);
   if (plot.W === 0) {
     plot.scale = canvas.width / 40;

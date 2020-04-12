@@ -2,19 +2,16 @@
   margin: 0;
   padding: 0;
 }
-
 html,
 body {
   width: 100%;
   height: 100%;
 }
-
 canvas {
-  height: 100vh;
+  height: calc(100vh - 3.5vmax);
   width: 100vw;
   display: block;
 }
-
 .buttons {
   display: flex;
   flex-direction: column;
@@ -27,7 +24,6 @@ canvas {
   border: 1px solid rgba(0, 0, 0, 0.5);
   z-index: 5;
 }
-
 .divPaint {
   display: flex;
   flex-direction: row;
@@ -43,7 +39,6 @@ canvas {
   z-index: 5;
   align-items: center;
 }
-
 .button,
 .catalog {
   display: flex;
@@ -58,7 +53,6 @@ canvas {
   align-items: center;
   box-sizing: border-box;
 }
-
 .size-button {
   display: flex;
   flex-direction: column;
@@ -70,11 +64,9 @@ canvas {
   box-sizing: border-box;
   margin: 0 0.8vw
 }
-
 .catalog {
   font-size: 0.75vw;
 }
-
 .button:hover,
 .size-button:hover,
 .catalog:hover {
@@ -82,7 +74,6 @@ canvas {
   border-radius: 3px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 }
-
 .buttons .submenu {
   display: none;
   padding: 5px 15px;
@@ -95,7 +86,6 @@ canvas {
   border-radius: 3px;
   border: 1px solid rgba(0, 0, 0, 0.5);
 }
-
 .buttons .submenu .sub {
   display: none;
   flex-wrap: wrap;
@@ -111,30 +101,18 @@ canvas {
   border: 1px solid rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
 }
-
 .button span {
   text-align: center;
 }
-
 .btn_img {
   vertical-align: middle;
   width: 65%;
   height: 65%;
 }
-
 .btnImg {
   vertical-align: middle;
   width: 2.3vmax;
 }
-
-/* html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-} */
-
 #prompt-form {
   display: inline-block;
   padding: 15px 15px 15px 70px;
@@ -144,7 +122,6 @@ body {
   background-size: 15%;
   vertical-align: middle;
 }
-
 #prompt-form-container {
   position: fixed;
   top: 0;
@@ -155,14 +132,12 @@ body {
   height: 100%;
   text-align: center;
 }
-
 #prompt-form-container:before {
   display: inline-block;
   height: 100vh;
   content: '';
   vertical-align: middle;
 }
-
 #cover-div {
   position: fixed;
   top: 0;
@@ -173,23 +148,14 @@ body {
   background-color: gray;
   opacity: 0.3;
 }
-
 #prompt-form input[type='text'] {
   width: 8vw;
 } 
-
- /* #prompt-form input {
-  margin-top: 10px;
-  height: 18px;
-} */
-
 .login {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: rgb(0, 102, 235);
   font-size: 3vmin;
-
 }
-
 .loginWindow {
   position: absolute;
   padding: 10px;
@@ -200,7 +166,6 @@ body {
   box-sizing: border-box;
   display: none;
 }
-
 .exit {
   padding: 3px;
   border-radius: 3px;
@@ -212,7 +177,6 @@ body {
   font-size: 2.5vmin;
   text-align: center;
 }
-
 #personal-container {
   position: fixed;
   top: 0;
@@ -223,14 +187,12 @@ body {
   height: 100vh;
   text-align: center;
 }
-
 #personal-container:before {
   display: inline-block;
   height: 100%;
   content: '';
   vertical-align: middle;
 }
-
 #person-form {
   font-size: 1.7vw;
   display: inline-block;
@@ -241,7 +203,6 @@ body {
   background-size: 15%;
   vertical-align: middle;
 }
-
 #person-form input,
 #prompt-form input {
   margin: 1vh 0.5vw 0;
@@ -300,7 +261,6 @@ body {
 .imgDemo4:hover {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
 }
-
 .readme {
   display: flex;
   flex-direction: column;
@@ -316,10 +276,7 @@ body {
   background-size: 15%;
   display: none;
   padding-left: 65px;
-
-
 }
-
 .readmeText {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: blue;
@@ -327,11 +284,9 @@ body {
   text-align: center;
   margin-bottom: 20px;
 }
-
 .readme input {
   padding: 3px 15px;
 }
-
 .SPAmenu {
   width: 100vw;
   display: flex;
@@ -343,7 +298,6 @@ body {
   box-sizing: border-box;
   z-index: 10;
 }
-
 #IPage {
   position: fixed;
   top: 3.5vmax;
@@ -351,11 +305,9 @@ body {
   width: 100vw;
   background-color: rgba(202, 200, 200, 0.2);
 }
-
 .about_text {
   margin-top: 4vmax;
   padding: 1%;
-  /* text-indent: 4%; */
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -369,7 +321,6 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
 }
-
 .picture1 {
   width: 17vw;
   position: fixed;
@@ -379,7 +330,6 @@ body {
   animation: my-animation 2s;
   transform: translateZ(0);
 }
-
 .picture2 {
   width: 17vw;
   position: fixed;
@@ -388,7 +338,6 @@ body {
   animation: my-animation 2s;
   transform: translateZ(0);
 }
-
 .picture3 {
   width: 17vw;
   position: fixed;
@@ -397,7 +346,6 @@ body {
   animation: my-animation 2s;
   transform: translateZ(0);
 }
-
 .picture4 {
   width: 17vw;
   position: fixed;
@@ -405,32 +353,23 @@ body {
   top: 8vmax;
   animation: my-animation 2s;
   transform: translateZ(0);
-
 }
-
-
 @keyframes my-animation {
   0% {
     opacity: 0;
   }
-
   100% {
     opacity: 1;
   }
 }
-
 @keyframes my-animation1 {
   0% {
     opacity: 1;
   }
-
   100% {
     opacity: 1;
   }
 }
-
 .templates {
   margin-left: 15vw;
 }
-
-
