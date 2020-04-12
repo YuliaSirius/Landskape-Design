@@ -119,9 +119,8 @@ function drawP() {
 }
 
 function startdraw(e) {
-   let x = (e.clientX - plot.X * canvas.width) / (plot.W * plot.scale);
+  let x = (e.clientX - plot.X * canvas.width) / (plot.W * plot.scale);
   let y = (e.clientY - plot.Y * canvas.height) / (plot.H * plot.scale);
-  console.log(x);
   path.coord.push([x, y]);
   path.downCoord.push([x, y]);
   if (path.coord.length >= 2) {
@@ -138,6 +137,7 @@ function draw() {
 let currentPath = null;
 
 export function drawPath(obj) {
+  cnt.fillStyle = 'rgba(0,0,0,0)';
   obj.way = new Path2D();
   let patt = cnt.createPattern(obj.pattern, 'repeat');
   cnt.fillStyle = patt;
@@ -220,10 +220,6 @@ export function drawPath(obj) {
 }
 
 function drawSel(coord) {
-  // let X1 = obj.coord[0][0] * (plot.W * plot.scale) + plot.X * canvas.width;
-  // let X2 = obj.coord[1][0] * (plot.W * plot.scale) + plot.X * canvas.width;
-  // let Y1 = obj.coord[0][1] * (plot.H * plot.scale) + plot.Y * canvas.height;
-  // let Y2 = obj.coord[1][1] * (plot.H * plot.scale) + plot.Y * canvas.height;
   for (let item of coord) {
     cnt.lineWidth = 1;
     cnt.beginPath();

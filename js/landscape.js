@@ -1,11 +1,11 @@
 import { zoom } from './events.js';
 import { zoomStep } from './events.js';
 import { plot } from './plotsSizes.js';
-import { image } from './leftButtons.js';
+// import { image } from './leftButtons.js';
 import { drawPath } from './leftButtons.js';
 import { ways } from './leftButtons.js';
 import { addEventMouseEnter } from './leftButtons.js';
-import { currentUser } from './topButtons.js';
+// import { currentUser } from './topButtons.js';
 import { createTopMenu } from './topButtons.js';
 import { addListener } from './events.js';
 import { addHtml } from './partOfHtml.js';
@@ -15,7 +15,7 @@ import { getPlot } from './plotsSizes.js';
 export let canvas;
 export let cnt;
 
- function resize(canvas) {
+function resize(canvas) {
   let displayWidth = canvas.clientWidth;
   let displayHeight = canvas.clientHeight;
   if (canvas.width != displayWidth || canvas.height != displayHeight) {
@@ -66,7 +66,7 @@ export let drawnObjects = [];
 export function reDraw() {
   cnt.clearRect(0, 0, canvas.width, canvas.height);
   cnt.fillStyle = 'rgba(202, 200, 200, 0.2)';
-    drawLines(plot.scale);
+  drawLines(plot.scale);
   drawPlot();
 
   if (plot.W) {
@@ -290,8 +290,8 @@ export function getObj(e) {
       currObj = item;
       addedObj = item;
       item.elemLeft = x - item.X;
-       item.elemTop = y - item.Y;
-          if (!item.rotation) {
+      item.elemTop = y - item.Y;
+      if (!item.rotation) {
         cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
         cnt.strokeStyle = 'rgb(68, 109, 245)';
         drawSelect(item);

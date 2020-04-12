@@ -1,6 +1,6 @@
 import { showNew } from './topButtons.js';
 import { ways } from './leftButtons.js';
-import { cnt } from './landscape.js';
+// import { cnt } from './landscape.js';
 import { canvas } from './landscape.js';
 import { reDraw } from './landscape.js';
 import { plot } from './plotsSizes.js';
@@ -166,7 +166,12 @@ function drawTemplates(template) {
       plot.W = template[key].W;
       plot.H = template[key].H;
       plot.ratio = template[key].ratio;
-      plot.scale = template[key].scale;
+      plot.scale = Math.floor(
+        Math.min(
+          (canvas.width * plot.ratio) / plot.W,
+          (canvas.height * plot.ratio) / plot.H
+        )
+      );
     } else if (key === 'path') {
       for (let item of template[key]) {
         item.pattern = new Image();
