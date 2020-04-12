@@ -53,12 +53,12 @@ let mouseDownImage = function (e) {
       }
     }
     let angle = 0;
-      let X =
+    let X =
       Math.floor((canvas.width - image[this.id].width) / 2) / canvas.width;
-     let Y =
+    let Y =
       Math.floor((canvas.height - image[this.id].height) / 2) / canvas.height;
 
-    let W =image[this.id].width / plot.scale;
+    let W = image[this.id].width / plot.scale;
     let H = image[this.id].height / plot.scale;
     if (this.id === 'pathway') {
       drawPathWay(number);
@@ -108,7 +108,7 @@ let path = {};
 function drawPathWay(number) {
   path.pattern = new Image();
   path.pattern.onload = function () {
-    Draw(path);
+    drawP(path);
   };
   path.pattern.src = `./img/pathway/${number}.png`;
   path.number = number;
@@ -116,14 +116,15 @@ function drawPathWay(number) {
   path.downCoord = [];
 }
 
-function Draw() {
+function drawP() {
   canvas.addEventListener('click', startdraw);
 }
 
 function startdraw(e) {
-  let x = e.clientX;
-  let y = e.clientY;
-  path.coord.push([x, y]);
+  let x = e.clientX / canvas.width;
+  let y = e.clientY / canvas.height;
+
+   path.coord.push([x, y]);
   path.downCoord.push([x, y]);
   if (path.coord.length >= 2) {
     draw();
@@ -133,99 +134,109 @@ function startdraw(e) {
 
 function draw() {
   drawPath(path);
-  drawSel(path.coord);
   ways.push(path);
   path = {};
 }
 let currentPath = null;
 
 export function drawPath(obj) {
+
   obj.way = new Path2D();
   let patt = cnt.createPattern(obj.pattern, 'repeat');
   cnt.fillStyle = patt;
 
   function getAngle() {
-    let x = obj.coord[1][0] - obj.coord[0][0];
-    let y = obj.coord[1][1] - obj.coord[0][1];
-    if (x == 0) return y > 0 ? 180 : 0;
+    let x = obj.coord[1][0] * canvas.width  - obj.coord[0][0] * canvas.width ;
+    let y = obj.coord[1][1]* canvas.height - obj.coord[0][1]* canvas.height;
+    if (x === 0) return y > 0 ? Math.PI : 0;
     let a = (Math.atan(y / x) * 180) / Math.PI;
-    a = x > 0 ? a + 90 : a + 270;
+    a = x >= 0 ? a + 90 : a + 270;
     return (Math.PI * a) / 180;
   }
   let angle = getAngle();
-  if (angle >= Math.PI && angle <= Math.PI * 1.5) {
-    cnt.beginPath();
+   if (angle >= Math.PI && angle <= Math.PI * 1.5) {
+      cnt.beginPath();
     obj.way.moveTo(
-      obj.coord[0][0] - Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
-      obj.coord[0][1] + Math.sin(getAngle()) * (plot.scale / 2)
+      obj.coord[0][0] * canvas.width -
+        Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
+      obj.coord[0][1] * canvas.height + Math.sin(getAngle()) * (plot.scale / 2)
     );
     obj.way.lineTo(
-      obj.coord[1][0] - Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
-      obj.coord[1][1] + Math.sin(getAngle()) * (plot.scale / 2)
+      obj.coord[1][0] * canvas.width -
+        Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
+      obj.coord[1][1] * canvas.height + Math.sin(getAngle()) * (plot.scale / 2)
     );
     obj.way.lineTo(
-      obj.coord[1][0] + Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
-      obj.coord[1][1] - Math.sin(getAngle()) * (plot.scale / 2)
+      obj.coord[1][0] * canvas.width +
+        Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
+      obj.coord[1][1] * canvas.height - Math.sin(getAngle()) * (plot.scale / 2)
     );
     obj.way.lineTo(
-      obj.coord[0][0] + Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
-      obj.coord[0][1] - Math.sin(getAngle()) * (plot.scale / 2)
+      obj.coord[0][0] * canvas.width +
+        Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
+      obj.coord[0][1] * canvas.height - Math.sin(getAngle()) * (plot.scale / 2)
     );
     obj.way.closePath();
     cnt.fill(obj.way);
   } else if (angle >= 0 && angle <= Math.PI * 0.5) {
     cnt.beginPath();
     obj.way.moveTo(
-      obj.coord[0][0] - Math.cos(getAngle()) * (plot.scale / 2),
-      obj.coord[0][1] - Math.sin(getAngle()) * (plot.scale / 2)
+      obj.coord[0][0] * canvas.width - Math.cos(getAngle()) * (plot.scale / 2),
+      obj.coord[0][1] * canvas.height - Math.sin(getAngle()) * (plot.scale / 2)
     );
     obj.way.lineTo(
-      obj.coord[1][0] - Math.cos(getAngle()) * (plot.scale / 2),
-      obj.coord[1][1] - Math.sin(getAngle()) * (plot.scale / 2)
+      obj.coord[1][0] * canvas.width - Math.cos(getAngle()) * (plot.scale / 2),
+      obj.coord[1][1] * canvas.height - Math.sin(getAngle()) * (plot.scale / 2)
     );
     obj.way.lineTo(
-      obj.coord[1][0] + Math.cos(getAngle()) * (plot.scale / 2),
-      obj.coord[1][1] + Math.sin(getAngle()) * (plot.scale / 2)
+      obj.coord[1][0] * canvas.width + Math.cos(getAngle()) * (plot.scale / 2),
+      obj.coord[1][1] * canvas.height + Math.sin(getAngle()) * (plot.scale / 2)
     );
     obj.way.lineTo(
-      obj.coord[0][0] + Math.cos(getAngle()) * (plot.scale / 2),
-      obj.coord[0][1] + Math.sin(getAngle()) * (plot.scale / 2)
+      obj.coord[0][0] * canvas.width + Math.cos(getAngle()) * (plot.scale / 2),
+      obj.coord[0][1] * canvas.height + Math.sin(getAngle()) * (plot.scale / 2)
     );
     obj.way.closePath();
     cnt.fill(obj.way);
   } else {
     cnt.beginPath();
     obj.way.moveTo(
-      obj.coord[0][0] - Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
-      obj.coord[0][1] + Math.abs(Math.sin(getAngle()) * (plot.scale / 2))
+      obj.coord[0][0] * canvas.width -
+        Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
+      obj.coord[0][1] * canvas.height +
+        Math.abs(Math.sin(getAngle()) * (plot.scale / 2))
     );
     obj.way.lineTo(
-      obj.coord[1][0] - Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
-      obj.coord[1][1] + Math.abs(Math.sin(getAngle()) * (plot.scale / 2))
+      obj.coord[1][0] * canvas.width -
+        Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
+      obj.coord[1][1] * canvas.height +
+        Math.abs(Math.sin(getAngle()) * (plot.scale / 2))
     );
     obj.way.lineTo(
-      obj.coord[1][0] + Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
-      obj.coord[1][1] - Math.abs(Math.sin(getAngle()) * (plot.scale / 2))
+      obj.coord[1][0] * canvas.width +
+        Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
+      obj.coord[1][1] * canvas.height -
+        Math.abs(Math.sin(getAngle()) * (plot.scale / 2))
     );
     obj.way.lineTo(
-      obj.coord[0][0] + Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
-      obj.coord[0][1] - Math.abs(Math.sin(getAngle()) * (plot.scale / 2))
+      obj.coord[0][0] * canvas.width +
+        Math.abs(Math.cos(getAngle()) * (plot.scale / 2)),
+      obj.coord[0][1] * canvas.height -
+        Math.abs(Math.sin(getAngle()) * (plot.scale / 2))
     );
     obj.way.closePath();
     cnt.fill(obj.way);
   }
   canvas.addEventListener('mousedown', getPath);
   canvas.addEventListener('mouseup', letGoPath);
+
 }
 
 function drawSel(coord) {
-  //??????????????????????
-  cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
-  cnt.strokeStyle = 'rgb(68, 109, 245)';
-  for (let item of coord) {
+   for (let item of coord) {
     cnt.lineWidth = 1;
     cnt.beginPath();
-    cnt.arc(item[0], item[1], 7, 0, 2 * Math.PI);
+    cnt.arc(item[0]*canvas.width, item[1]*canvas.height, 7, 0, 2 * Math.PI);
     cnt.fill();
     cnt.stroke();
   }
@@ -247,6 +258,7 @@ function getPath(e) {
       cnt.strokeStyle = 'rgb(68, 109, 245)';
       drawSel(currentPath.coord);
     }
+   
   }
   canvas.addEventListener('mousemove', movePath);
 }
@@ -257,10 +269,16 @@ function movePath(e) {
   if (!currentPath) {
     return;
   }
-  currentPath.coord[0][0] = currentPath.downCoord[0][0] + (x - down[0]);
-  currentPath.coord[0][1] = currentPath.downCoord[0][1] + (y - down[1]);
-  currentPath.coord[1][0] = currentPath.downCoord[1][0] + (x - down[0]);
-  currentPath.coord[1][1] = currentPath.downCoord[1][1] + (y - down[1]);
+  currentPath.coord[0][0] =
+    (currentPath.downCoord[0][0] * canvas.width + (x - down[0])) / canvas.width;
+  currentPath.coord[0][1] =
+    (currentPath.downCoord[0][1] * canvas.height + (y - down[1])) /
+    canvas.height;
+  currentPath.coord[1][0] =
+    (currentPath.downCoord[1][0] * canvas.width + (x - down[0])) / canvas.width;
+  currentPath.coord[1][1] =
+    (currentPath.downCoord[1][1] * canvas.height + (y - down[1])) /
+    canvas.height;
   reDraw();
   cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
   cnt.strokeStyle = 'rgb(68, 109, 245)';
@@ -277,7 +295,6 @@ function letGoPath() {
     currentPath.downCoord[1][1] = currentPath.coord[1][1];
     drawSel(currentPath.coord);
   }
-  // reDraw();
   currentPath = null;
   canvas.removeEventListener('mousemove', movePath);
 }

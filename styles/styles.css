@@ -249,11 +249,7 @@ body {
 }
 #mail, #login, #Pass {
   width: 12vw;
-
 }
-
-
-
 .logo,
 .about {
   font-size: 2.5vw;
@@ -263,17 +259,14 @@ body {
   margin-left: 8%;
   cursor: pointer;
 }
-
 .logo:hover,
 .about:hover {
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.5)
 }
-
 .person {
   margin-right: 2vw;
   margin-left: 20vw;
 }
-
 .imgDemo1,
 .imgDemo2,
 .imgDemo3,
@@ -281,36 +274,31 @@ body {
   position: absolute;
   width: 40px;
 }
-
 .imgDemo1 {
   left: 150px;
   top: 100px;
   cursor: pointer;
 }
-
 .imgDemo2 {
   right: 80px;
   top: 100px;
   cursor: pointer;
 }
-
 .imgDemo3 {
   right: 80px;
   bottom: 100px;
   cursor: pointer;
 }
-
 .imgDemo4 {
   bottom: 100px;
   left: 150px;
   cursor: pointer;
 }
-
 .imgDemo1:hover,
 .imgDemo2:hover,
 .imgDemo3:hover,
 .imgDemo4:hover {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
 }
 
 .readme {

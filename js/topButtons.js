@@ -10,6 +10,8 @@ import { ways } from './leftButtons.js';
 import { addedPath } from './leftButtons.js';
 import { showDemo } from './templates.js';
 import { restoreInfo } from './ajax.js';
+import { cnt } from './landscape.js';
+
 
 export function createTopMenu() {
   let divPaint = document.createElement('div');
@@ -43,9 +45,8 @@ function createLoginName() {
 
 function save() {
   if (Object.keys(currentUser).length === 0) {
-    loginAccount();
-  }
-  storeInfo();
+       loginAccount();
+  } else storeInfo();
 }
 
 export function showNew() {
@@ -56,7 +57,6 @@ export function showNew() {
   plot.X = 0;
   plot.Y = 0;
   plot.ratio = 0.65;
-  // plot.scale = 30;
   reDraw();
 }
 
@@ -130,18 +130,6 @@ function loginAccount() {
     let loginWindow = document.querySelector('.loginWindow');
     loginWindow.style.display = 'block';
     document.addEventListener('mousedown', hideLoginWindow);
-
-    //    function showLoginWindow(e) {
-    //   loginWindow.style.display = 'block';
-    //   console.log( e.target.className)
-    //   if (
-    //     e.target.className !== 'loginWindow' ||
-    //     e.target.className !== 'size-button , person' || e.target.className !== 'btnImg'
-    //   ) {
-    //     loginWindow.style.display = 'none';
-    //   }
-    //  else loginWindow.style.display = 'block';
-    // }
     return;
   }
   createForm();
@@ -228,8 +216,8 @@ function submitValue(e) {
     let currUser = JSON.stringify(currentUser);
     localStorage.setItem('user', currUser);
     createLoginName();
-    restoreInfo();
-    complete();
+    storeInfo()
+      complete();
   }
   e.preventDefault();
 }
@@ -265,11 +253,10 @@ function showCover() {
 }
 
 function lock() {
-let canvas = document.querySelector('canvas')
-canvas.style.pointerEvents = 'none';
-
+  let canvas = document.querySelector('canvas');
+  canvas.style.pointerEvents = 'none';
 }
 function unlock() {
-  let canvas = document.querySelector('canvas')
+  let canvas = document.querySelector('canvas');
   canvas.style.pointerEvents = 'auto';
 }

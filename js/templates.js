@@ -110,12 +110,19 @@ function hideReadme() {
 function chooseTemplate(e) {
   let img1 = document.querySelector('.imgDemo1');
   let img2 = document.querySelector('.imgDemo2');
-
+  let img3 = document.querySelector('.imgDemo3');
+  let img4 = document.querySelector('.imgDemo4');
   if (e.target === img1) {
     let count = 'templ1';
     showTemplate(count);
   } else if (e.target === img2) {
     let count = 'templ2';
+    showTemplate(count);
+  } else if (e.target === img3) {
+    let count = 'templ3';
+    showTemplate(count);
+  } else if (e.target === img4) {
+    let count = 'templ4';
     showTemplate(count);
   } else return;
 }

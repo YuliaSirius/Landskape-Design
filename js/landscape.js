@@ -22,15 +22,16 @@ function resize(canvas) {
     cnt.fillRect(0, 0, canvas.width, canvas.height);
   }
 }
-
+let start;
 function startMain() {
+  start = true;
   canvas = document.getElementById('cnv');
   cnt = canvas.getContext('2d');
   resize(canvas);
   plot.scale = canvas.width / 40;
   createTopMenu();
   // if(currentUser[0]) {
-    restoreInfo();
+  restoreInfo();
 
   // }
 
@@ -202,13 +203,13 @@ export function addImage(sub, number, X, Y, W, H, selectX, selectY, angle) {
   let img = new Image();
   img.Xshare = X;
   img.Yshare = Y;
-  img.widthShare = Math.floor(W*1000)/1000;
-  img.heightShare = Math.floor(H*1000)/1000;
+  img.widthShare = Math.floor(W * 1000) / 1000;
+  img.heightShare = Math.floor(H * 1000) / 1000;
   img.angle = angle;
   img.s = sub;
   img.num = number;
-  img.selectX= Math.floor(selectX*1000)/1000;
-  img.selectY= Math.floor(selectY*1000)/1000;;
+  img.selectX = Math.floor(selectX * 1000) / 1000;
+  img.selectY = Math.floor(selectY * 1000) / 1000;
 
   if (!img.selectX) {
     img.selectX = 1;
@@ -229,7 +230,7 @@ export function addImage(sub, number, X, Y, W, H, selectX, selectY, angle) {
 function drawImage(img) {
   img.X = img.Xshare * canvas.width;
   img.Y = img.Yshare * canvas.height;
-   img.W = img.widthShare * plot.scale * img.selectX;
+  img.W = img.widthShare * plot.scale * img.selectX;
   img.H = img.heightShare * plot.scale * img.selectY;
   let rotateX = img.X + img.W / 2;
   let rotateY = img.Y + img.H / 2;
@@ -262,6 +263,7 @@ function drawImage(img) {
   cnt.fill(img.template);
 
   canvas.addEventListener('mousedown', getObj);
+  canvas.addEventListener("touchstart", getObj);
 }
 
 let currObj;
@@ -351,6 +353,9 @@ export function getObj(e) {
   }
   canvas.addEventListener('mousemove', moveObj);
   canvas.addEventListener('mouseup', letGoObj);
+  canvas.addEventListener("touchmove", moveObj);
+  canvas.addEventListener("touchend", letGoObj);
+  canvas.addEventListener("touchcancel", letGoObj);
 }
 
 function getX1Y1(image, rx, ry) {
@@ -650,9 +655,9 @@ let count = 1;
 let SPAState = {};
 let pictures = {
   1: './img/img1.png',
-  2: './img/img1.png',
-  3: './img/img1.png',
-  4: './img/img1.png',
+  2: './img/img2.png',
+  3: './img/img3.png',
+  4: './img/img4.png',
 };
 function switchToStateFromURLHash() {
   let URLHash = window.location.hash;
@@ -665,13 +670,21 @@ function switchToStateFromURLHash() {
   page.innerHTML = '';
   switch (SPAState.pagename) {
     case 'Main':
-            page.innerHTML = addHtml();
+      page.innerHTML = addHtml();
       addListener();
       addEventMouseEnter();
-      startMain();
-      break;
+if (!start) {
+  startMain();
+} else {
+  canvas = document.getElementById('cnv');
+  cnt = canvas.getContext('2d');
+  resize(canvas);
+  createTopMenu();
+  reDraw()
+}
+        break;
     case 'About':
-         page.innerHTML = `<div class="about_text"><h3>Application description</h3><p>
+      page.innerHTML = `<div class="about_text"><h3>Application description</h3><p>
        The application allows you to create an individual plan of a suburban area
        indicating the boundaries of the site (fence), the arrangement of capital
         structures (house, bathhouse, garage, outbuildings, pool, gazebo, etc.). 
