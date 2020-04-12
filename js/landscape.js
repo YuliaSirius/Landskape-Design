@@ -5,6 +5,7 @@ import { image } from './leftButtons.js';
 import { drawPath } from './leftButtons.js';
 import { ways } from './leftButtons.js';
 import { addEventMouseEnter } from './leftButtons.js';
+import { currentUser } from './topButtons.js';
 import { createTopMenu } from './topButtons.js';
 import { addListener } from './events.js';
 import { addHtml } from './partOfHtml.js';
@@ -28,7 +29,11 @@ function startMain() {
   resize(canvas);
   plot.scale = canvas.width / 40;
   createTopMenu();
-  restoreInfo();
+  // if(currentUser[0]) {
+    restoreInfo();
+
+  // }
+
   window.addEventListener('resize', resizeCanvas);
   reDraw();
 }
@@ -193,16 +198,24 @@ function drawArrows(x, y, length, height, step) {
   cnt.fill();
 }
 
-export function addImage(sub, number, X, Y, W, H, angle) {
+export function addImage(sub, number, X, Y, W, H, selectX, selectY, angle) {
   let img = new Image();
   img.Xshare = X;
   img.Yshare = Y;
-  img.widthShare = W;
-  img.heightShare = H;
+  img.widthShare = Math.floor(W*1000)/1000;
+  img.heightShare = Math.floor(H*1000)/1000;
   img.angle = angle;
   img.s = sub;
   img.num = number;
+  img.selectX= Math.floor(selectX*1000)/1000;
+  img.selectY= Math.floor(selectY*1000)/1000;;
 
+  if (!img.selectX) {
+    img.selectX = 1;
+  }
+  if (!img.selectY) {
+    img.selectY = 1;
+  }
   if (!img.angle) {
     img.angle = 0;
   }
@@ -216,16 +229,8 @@ export function addImage(sub, number, X, Y, W, H, angle) {
 function drawImage(img) {
   img.X = img.Xshare * canvas.width;
   img.Y = img.Yshare * canvas.height;
-  img.width = img.widthShare * plot.scale;
-  img.height = img.heightShare * plot.scale;
-  if (!img.selectX) {
-    img.selectX = 1;
-  }
-  if (!img.selectY) {
-    img.selectY = 1;
-  }
-  img.W = img.width * img.selectX;
-  img.H = img.height * img.selectY;
+   img.W = img.widthShare * plot.scale * img.selectX;
+  img.H = img.heightShare * plot.scale * img.selectY;
   let rotateX = img.X + img.W / 2;
   let rotateY = img.Y + img.H / 2;
   cnt.save();
@@ -660,13 +665,13 @@ function switchToStateFromURLHash() {
   page.innerHTML = '';
   switch (SPAState.pagename) {
     case 'Main':
-      page.innerHTML = addHtml();
+            page.innerHTML = addHtml();
       addListener();
       addEventMouseEnter();
       startMain();
       break;
     case 'About':
-      page.innerHTML = `<div class="about_text"><h3>Application description</h3><p>
+         page.innerHTML = `<div class="about_text"><h3>Application description</h3><p>
        The application allows you to create an individual plan of a suburban area
        indicating the boundaries of the site (fence), the arrangement of capital
         structures (house, bathhouse, garage, outbuildings, pool, gazebo, etc.). 

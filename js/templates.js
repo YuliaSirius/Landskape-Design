@@ -61,16 +61,12 @@ function update() {
   // для них сработает css-анимация transform, браузер вынесет их на отдельный слой самостоятельно
   let img1 = document.querySelector('.imgDemo1');
   img1.style.transform = `matrix(${scaleX}, 0, 0, ${scaleY},${offsetX},${offsetY})`;
-  // img1.style.transform = `rotate(${angle}deg)`;
   let img2 = document.querySelector('.imgDemo2');
   img2.style.transform = `matrix(${scaleX}, 0, 0, ${scaleY},${-offsetX},${offsetY})`;
-  // img2.style.transform = `rotate(${angle}deg)`;
   let img3 = document.querySelector('.imgDemo3');
   img3.style.transform = `matrix(${scaleX}, 0, 0, ${scaleY},${-offsetX},${-offsetY})`;
-  // img3.style.transform = `rotate(${angle}deg)`;
   let img4 = document.querySelector('.imgDemo4');
   img4.style.transform = `matrix(${scaleX}, 0, 0, ${scaleY},${offsetX},${-offsetY})`;
-  // img4.style.transform = `rotate(${angle}deg)`;
 }
 
 function createReadme() {
@@ -113,8 +109,13 @@ function hideReadme() {
 
 function chooseTemplate(e) {
   let img1 = document.querySelector('.imgDemo1');
+  let img2 = document.querySelector('.imgDemo2');
+
   if (e.target === img1) {
     let count = 'templ1';
+    showTemplate(count);
+  } else if (e.target === img2) {
+    let count = 'templ2';
     showTemplate(count);
   } else return;
 }
@@ -173,7 +174,9 @@ function drawTemplates(template) {
         template[key][3],
         template[key][4],
         template[key][5],
-        template[key][6]
+        template[key][6],
+        template[key][7],
+        template[key][8]
       );
     }
   }
