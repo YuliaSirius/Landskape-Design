@@ -1,6 +1,7 @@
 import { addImage } from './landscape.js';
 import { canvas } from './landscape.js';
 import { plot } from './plotsSizes.js';
+import { getPlot } from './plotsSizes.js';
 import { cnt } from './landscape.js';
 import { reDraw } from './landscape.js';
 
@@ -102,14 +103,18 @@ export let ways = [];
 let path = {};
 
 function drawPathWay(number) {
-  path.pattern = new Image();
-  path.pattern.onload = function () {
-    drawP(path);
-  };
-  path.pattern.src = `./img/pathway/${number}.png`;
-  path.number = number;
-  path.coord = [];
-  path.downCoord = [];
+  if (!plot.W) {
+    getPlot();
+  } else {
+    path.pattern = new Image();
+    path.pattern.onload = function () {
+      drawP(path);
+    };
+    path.pattern.src = `./img/pathway/${number}.png`;
+    path.number = number;
+    path.coord = [];
+    path.downCoord = [];
+  }
 }
 
 function drawP() {
