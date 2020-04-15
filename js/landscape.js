@@ -246,8 +246,7 @@ function drawImage(img) {
   img.template.closePath();
   cnt.fill(img.template);
   canvas.addEventListener('mousedown', getObj);
-  canvas.addEventListener('touchstart', touchStart)
-  
+  canvas.addEventListener('touchstart', touchStart);
 }
 let currObj;
 let topLeft;
@@ -296,13 +295,12 @@ function touchEnd(e) {
 }
 function touchMove(e) {
   e.preventDefault();
-  if (!currObj) 
-    return;
+  if (!currObj) return;
   let touchInfo = e.targetTouches[0];
   currObj.Yshare =
     (touchInfo.pageY - touchShiftY - plot.Y * canvas.height) /
     (plot.H * plot.scale);
-    currObj.Xshare =
+  currObj.Xshare =
     (touchInfo.pageX - touchShiftX - plot.X * canvas.width) /
     (plot.W * plot.scale);
   reDraw();
