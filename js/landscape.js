@@ -23,7 +23,6 @@ function startMain() {
   window.addEventListener('resize', resizeCanvas);
   reDraw();
 }
-
 export function resizeCanvas() {
   resize(canvas);
   if (plot.W === 0) {
@@ -59,7 +58,6 @@ function resize(canvas) {
 }
 
 export let drawnObjects = [];
-
 export function reDraw() {
   cnt.clearRect(0, 0, canvas.width, canvas.height);
   cnt.fillStyle = 'rgba(202, 200, 200, 0.2)';
@@ -81,7 +79,6 @@ export function reDraw() {
     drawPath(item);
   }
 }
-
 export function drawLines(step) {
   cnt.strokeStyle = 'black';
   cnt.lineWidth = 0.5;
@@ -98,7 +95,6 @@ export function drawLines(step) {
     cnt.stroke();
   }
 }
-
 let grass;
 export function drawPlot() {
   if (!grass) {
@@ -250,10 +246,9 @@ function drawImage(img) {
   img.template.closePath();
   cnt.fill(img.template);
   canvas.addEventListener('mousedown', getObj);
-  canvas.ontouchstart = touchStart;
+  canvas.addEventListener('touchstart', touchStart)
   
 }
-
 let currObj;
 let topLeft;
 let topRight;
@@ -265,9 +260,9 @@ let right;
 let left;
 let rotation;
 export let addedObj;
-
 let touchShiftX = 0;
 let touchShiftY = 0;
+
 function touchStart(e) {
   e.preventDefault();
   let touchInfo = e.targetTouches[0];
@@ -279,10 +274,14 @@ function touchStart(e) {
       touchShiftY = touchInfo.pageY - img.Y;
     }
   }
+  cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
+  cnt.strokeStyle = 'rgb(68, 109, 245)';
+  drawSelect(currObj);
+  cnt.fillStyle = 'black';
+  drawSize(currObj);
   canvas.ontouchmove = touchMove;
   canvas.ontouchend = touchEnd;
 }
-
 function touchEnd(e) {
   e.preventDefault();
   reDraw();
@@ -295,8 +294,6 @@ function touchEnd(e) {
   }
   currObj = null;
 }
-
-
 function touchMove(e) {
   e.preventDefault();
   if (!currObj) 
@@ -308,8 +305,6 @@ function touchMove(e) {
     currObj.Xshare =
     (touchInfo.pageX - touchShiftX - plot.X * canvas.width) /
     (plot.W * plot.scale);
-  // img.X = touchInfo.pageX - touchShiftX + 'px';
-  // img.Y = touchInfo.pageY - touchShiftY + 'px';
   reDraw();
   cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
   cnt.strokeStyle = 'rgb(68, 109, 245)';
@@ -317,8 +312,6 @@ function touchMove(e) {
   cnt.fillStyle = 'black';
   drawSize(currObj);
 }
-
-
 export function getObj(e) {
   let x = e.offsetX;
   let y = e.offsetY;
