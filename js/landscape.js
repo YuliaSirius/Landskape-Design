@@ -250,7 +250,10 @@ function drawImage(img) {
   img.template.closePath();
   cnt.fill(img.template);
   canvas.addEventListener('mousedown', getObj);
+  canvas.ontouchstart = touchStart;
+  
 }
+
 let currObj;
 let topLeft;
 let topRight;
@@ -262,6 +265,60 @@ let right;
 let left;
 let rotation;
 export let addedObj;
+
+let touchShiftX = 0;
+let touchShiftY = 0;
+function touchStart(e) {
+  e.preventDefault();
+  let touchInfo = e.targetTouches[0];
+  currObj = null;
+  for (let item of drawnObjects) {
+    if (cnt.isPointInPath(item.template, touchInfo.pageX, touchInfo.pageY)) {
+      currObj = item;
+      touchShiftX = touchInfo.pageX - img.X;
+      touchShiftY = touchInfo.pageY - img.Y;
+    }
+  }
+  canvas.ontouchmove = touchMove;
+  canvas.ontouchend = touchEnd;
+}
+
+function touchEnd(e) {
+  e.preventDefault();
+  reDraw();
+  if (currObj) {
+    cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    cnt.strokeStyle = 'rgb(68, 109, 245)';
+    drawSelect(currObj);
+    cnt.fillStyle = 'black';
+    drawSize(currObj);
+  }
+  currObj = null;
+}
+
+
+function touchMove(e) {
+  e.preventDefault();
+  if (!currObj) 
+    return;
+  let touchInfo = e.targetTouches[0];
+  currObj.Yshare =
+    (touchInfo.pageY - touchShiftY - plot.Y * canvas.height) /
+    (plot.H * plot.scale);
+    currObj.Xshare =
+    (touchInfo.pageX - touchShiftX - plot.X * canvas.width) /
+    (plot.W * plot.scale);
+  // img.X = touchInfo.pageX - touchShiftX + 'px';
+  // img.Y = touchInfo.pageY - touchShiftY + 'px';
+  reDraw();
+  cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
+  cnt.strokeStyle = 'rgb(68, 109, 245)';
+  drawSelect(currObj);
+  cnt.fillStyle = 'black';
+  drawSize(currObj);
+}
+
+
 export function getObj(e) {
   let x = e.offsetX;
   let y = e.offsetY;
@@ -467,6 +524,7 @@ function drawSize(image) {
   XY = getX1Y1(image, rx, ry);
   cnt.fillText(`${(image.H / plot.scale).toFixed(1)} m`, XY[0], XY[1]);
 }
+
 let eX = [];
 let eY = [];
 function moveObj(e) {
@@ -668,6 +726,7 @@ function switchToStateFromURLHash() {
       break;
   }
 }
+
 function switchToState(newState) {
   let stateStr = newState.pagename;
   location.hash = stateStr;
@@ -678,7 +737,9 @@ function switchToMainPage() {
 function switchToAboutPage() {
   switchToState({ pagename: 'About' });
 }
+
 switchToStateFromURLHash();
+
 function showPictures() {
   setTimeout(() => show(count), 2000);
 }
@@ -696,6 +757,7 @@ function show(key) {
     return;
   } else showPictures();
 }
+
 window.addEventListener('beforeunload', askQuestion);
 export function askQuestion(event) {
   event.preventDefault();
