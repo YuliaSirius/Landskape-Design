@@ -7,7 +7,7 @@ export let plot = {
   X: 0,
   Y: 0,
   ratio: 0.65,
- };
+};
 export function getPlot() {
   if (!plot.W) {
     getPlotSizes();
@@ -46,23 +46,18 @@ function getPlotSizes() {
       )
     );
     plot.X =
-    Math.floor(
-      ((canvas.width - plot.W * plot.scale) / 2 / canvas.width) * 1000
-    ) / 1000;
-  plot.Y =
-    Math.floor(
-      ((canvas.height - plot.H * plot.scale) / 2 / canvas.height) * 1000
-    ) / 1000;
-      complete();
+      Math.floor(
+        ((canvas.width - plot.W * plot.scale) / 2 / canvas.width) * 1000
+      ) / 1000;
+    plot.Y =
+      Math.floor(
+        ((canvas.height - plot.H * plot.scale) / 2 / canvas.height) * 1000
+      ) / 1000;
+    complete();
     return false;
   };
-  function complete() {
-    container.style.display = 'none';
-    document.onkeydown = null;
-    hideCover();
-    reDraw();
-  }
   form.cancel.onclick = function () {
+    console.log(1);
     complete();
   };
   document.onkeydown = function (e) {
@@ -85,12 +80,20 @@ function getPlotSizes() {
     }
   };
 }
+function complete() {
+  let container = document.getElementById('prompt-form-container');
+  container.style.display = 'none';
+
+  document.onkeydown = null;
+  hideCover();
+  reDraw();
+}
 function showCover() {
   let divHtml = document.getElementById('IPage');
   let coverDiv = document.createElement('div');
-  coverDiv.id = 'cover-div';
+  coverDiv.id = 'cover';
   divHtml.append(coverDiv);
 }
 function hideCover() {
-  document.getElementById('cover-div').remove();
+  document.getElementById('cover').remove();
 }

@@ -98,6 +98,7 @@ export function drawLines(step) {
     cnt.stroke();
   }
 }
+
 let grass;
 export function drawPlot() {
   if (!grass) {
@@ -206,19 +207,20 @@ export function addImage(sub, number, X, Y, W, H, selectX, selectY, angle) {
   }
   img.addEventListener('load', function () {
     drawnObjects.push(img);
-    drawImage(img);
+    if (!plot.W) {
+      getPlot();
+    } else {
+      drawImage(img);
+    }
   });
   img.src = `./img/${sub}/${number}.png`;
 }
 function drawImage(img) {
-  if (!plot.W) {
-    getPlot();
-  } else {
-    img.X = plot.X * canvas.width + img.Xshare * plot.W * plot.scale;
-    img.Y = plot.Y * canvas.height + img.Yshare * plot.H * plot.scale;
-    img.W = img.widthShare * plot.scale * img.selectX;
-    img.H = img.heightShare * plot.scale * img.selectY;
-  }
+  if (plot.W == 0) return;
+  img.X = plot.X * canvas.width + img.Xshare * plot.W * plot.scale;
+  img.Y = plot.Y * canvas.height + img.Yshare * plot.H * plot.scale;
+  img.W = img.widthShare * plot.scale * img.selectX;
+  img.H = img.heightShare * plot.scale * img.selectY;
   let rotateX = img.X + img.W / 2;
   let rotateY = img.Y + img.H / 2;
   cnt.save();
@@ -249,7 +251,6 @@ function drawImage(img) {
   cnt.fill(img.template);
   canvas.addEventListener('mousedown', getObj);
 }
-
 let currObj;
 let topLeft;
 let topRight;
@@ -466,7 +467,6 @@ function drawSize(image) {
   XY = getX1Y1(image, rx, ry);
   cnt.fillText(`${(image.H / plot.scale).toFixed(1)} m`, XY[0], XY[1]);
 }
-
 let eX = [];
 let eY = [];
 function moveObj(e) {
@@ -643,6 +643,7 @@ function switchToStateFromURLHash() {
         canvas = document.getElementById('cnv');
         cnt = canvas.getContext('2d');
         resize(canvas);
+
         createTopMenu();
         reDraw();
       }
@@ -667,7 +668,6 @@ function switchToStateFromURLHash() {
       break;
   }
 }
-
 function switchToState(newState) {
   let stateStr = newState.pagename;
   location.hash = stateStr;
@@ -678,9 +678,7 @@ function switchToMainPage() {
 function switchToAboutPage() {
   switchToState({ pagename: 'About' });
 }
-
 switchToStateFromURLHash();
-
 function showPictures() {
   setTimeout(() => show(count), 2000);
 }
@@ -697,4 +695,9 @@ function show(key) {
   if (count > Object.keys(pictures).length) {
     return;
   } else showPictures();
+}
+window.addEventListener('beforeunload', askQuestion);
+export function askQuestion(event) {
+  event.preventDefault();
+  event.returnValue = '';
 }

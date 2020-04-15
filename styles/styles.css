@@ -21,7 +21,7 @@ canvas {
   -webkit-box-align: center;
           align-items: center;
   position: fixed;
-  top: 8vmax;
+  top: 7vmax;
   background-color: rgba(147, 193, 252, 0.7);
   padding: 1vmax 0.3vmax;
   border-radius: 3px;
@@ -93,7 +93,7 @@ canvas {
 }
 .buttons .submenu {
   display: none;
-  padding: 5px 15px;
+  padding: 0.5vmax;
   cursor: pointer;
   position: absolute;
   background-color: rgba(147, 193, 252, 0.7);
@@ -227,6 +227,17 @@ canvas {
 }
 #mail, #login, #Pass {
   width: 12vw;
+}
+
+#cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9000;
+  width: 100vw;
+  height: 100vh;
+  background-color: gray;
+  opacity: 0.3;
 }
 .logo,
 .about {

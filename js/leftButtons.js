@@ -17,14 +17,13 @@ export let image = {
   scooters: { quantity: 2, added: false, width: 50, height: 30 },
   paving: { quantity: 10, added: false, width: 100, height: 100 },
   pathway: { quantity: 12, added: false, width: 100, height: 100 },
-  pavement: { quantity: 12, added: false, width: 100, height: 100 },
+  pavement: { quantity: 12, added: false, width: 80, height: 80 },
   ponds: { quantity: 3, added: false, width: 120, height: 120 },
   pools: { quantity: 1, added: false, width: 120, height: 120 },
   fountains: { quantity: 4, added: false, width: 80, height: 80 },
   houses: { quantity: 2, added: false, width: 172, height: 136 },
   stairs: { quantity: 1, added: false, width: 100, height: 100 },
 };
-
 function createElem(sub, key) {
   if (!image[key].added) {
     for (let i = 0; i < image[key].quantity; i++) {
@@ -43,7 +42,6 @@ function createElem(sub, key) {
     sub.addEventListener('mousedown', mouseDownImage);
   }
 }
-
 let mouseDownImage = function (e) {
   if (e.target.className === 'catalog' || e.target.className === 'btnImg') {
     let arr = [...this.children];
@@ -63,21 +61,18 @@ let mouseDownImage = function (e) {
     } else addImage(this.id, number, X, Y, W, H, angle);
   }
 };
-
 export function addEventMouseEnter() {
   let buttons = [...document.querySelectorAll('.button')];
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('mouseenter', mouseEnter);
   }
 }
-
 function mouseEnter() {
   let s = this.querySelector('.submenu');
   s.style.display = 'block';
   this.addEventListener('mouseleave', mouseLeave);
   mouseEnterSub(s);
 }
-
 function mouseEnterSub(s) {
   let arr = [...s.querySelectorAll('.catalog')];
   for (let i = 0; i < arr.length; i++) {
@@ -93,15 +88,12 @@ function mouseEnterSub(s) {
     });
   }
 }
-
 function mouseLeave() {
   let s = this.querySelector('.submenu');
   s.style.display = 'none';
 }
-
 export let ways = [];
 let path = {};
-
 function drawPathWay(number) {
   if (!plot.W) {
     getPlot();
@@ -116,11 +108,9 @@ function drawPathWay(number) {
     path.downCoord = [];
   }
 }
-
 function drawP() {
   canvas.addEventListener('click', startdraw);
 }
-
 function startdraw(e) {
   let x = (e.clientX - plot.X * canvas.width) / (plot.W * plot.scale);
   let y = (e.clientY - plot.Y * canvas.height) / (plot.H * plot.scale);
@@ -131,14 +121,12 @@ function startdraw(e) {
     canvas.removeEventListener('click', startdraw);
   }
 }
-
 function draw() {
   drawPath(path);
   ways.push(path);
   path = {};
 }
 let currentPath = null;
-
 export function drawPath(obj) {
   cnt.fillStyle = 'rgba(0,0,0,0)';
   obj.way = new Path2D();
@@ -221,7 +209,6 @@ export function drawPath(obj) {
   canvas.addEventListener('mousedown', getPath);
   canvas.addEventListener('mouseup', letGoPath);
 }
-
 function drawSel(coord) {
   for (let item of coord) {
     cnt.lineWidth = 1;
@@ -237,7 +224,6 @@ function drawSel(coord) {
     cnt.stroke();
   }
 }
-
 let down = [];
 export let addedPath;
 function getPath(e) {
@@ -257,7 +243,6 @@ function getPath(e) {
   }
   canvas.addEventListener('mousemove', movePath);
 }
-
 function movePath(e) {
   let x = e.offsetX;
   let y = e.offsetY;
@@ -281,7 +266,6 @@ function movePath(e) {
   cnt.strokeStyle = 'rgb(68, 109, 245)';
   drawSel(currentPath.coord);
 }
-
 function letGoPath() {
   if (currentPath) {
     cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';

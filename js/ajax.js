@@ -11,7 +11,6 @@ let ajaxHandlerScript = 'https://fe.it-academy.by/AjaxStringStorage2.php';
 let updatePassword;
 let stringName = 'MIASNIKOVA_LANDSKAPE_OBJECTS';
 
-
 let savedLast;
 let allUsers = [];
 export function storeInfo() {
@@ -43,7 +42,7 @@ function lockGetReady(callresult) {
       else if (callresult.result != '') {
         savedLast = JSON.parse(callresult.result);
         allUsers = savedLast;
-        updateData();
+              updateData();
       }
     }
     function updateData() {

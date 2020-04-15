@@ -31,10 +31,15 @@ export let currentUser = [];
 if (localStorage.key('user')) {
   currentUser = JSON.parse(localStorage.getItem('user'));
 }
+
+let needToSaved;
 function save() {
   if (Object.keys(currentUser).length === 0) {
-       loginAccount();
-  } else storeInfo();
+    needToSaved = true;
+    loginAccount();
+  } else {
+    storeInfo();
+  }
 }
 export function showNew() {
   ways.splice(ways[0], ways.length);
@@ -70,13 +75,23 @@ function createButton(name, handler, left) {
     exit.addEventListener('mousedown', LogOff);
   }
 }
+import { askQuestion } from './landscape.js';
 function LogOff() {
+  storeInfo();
+  window.removeEventListener('beforeunload', askQuestion);
+  removeAll();
+  window.location.reload();
+}
+
+function removeAll() {
   localStorage.removeItem('user');
   currentUser = [];
-  window.location.reload();
   let loginWindow = document.querySelector('.loginWindow');
   loginWindow.style.display = 'none';
-}
+  let login = document.querySelector('.login');
+  login.remove();
+ }
+
 function savePicture() {
   removeSelection();
   reDraw();
@@ -104,6 +119,7 @@ function deleteAll() {
   ways.splice(ways[0], ways.length);
   reDraw();
 }
+
 let isError;
 function loginAccount() {
   if (Object.keys(currentUser).length !== 0) {
@@ -188,9 +204,11 @@ function submitValue(e) {
     let currUser = JSON.stringify(currentUser);
     localStorage.setItem('user', currUser);
     createLoginName();
-    showNew()
-    restoreInfo()
-      complete();
+    if (!needToSaved) {
+      showNew();
+      restoreInfo();
+    } else storeInfo();
+    complete();
   }
   e.preventDefault();
 }
