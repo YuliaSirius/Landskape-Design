@@ -1,11 +1,7 @@
 import { showNew } from './topButtons.js';
-import { ways } from './leftButtons.js';
-import { canvas } from './landscape.js';
-import { reDraw } from './landscape.js';
+import { ways, drawPath } from './leftButtons.js';
+import { canvas, reDraw, addImage, resizeCanvas } from './landscape.js';
 import { plot } from './plotsSizes.js';
-import { addImage } from './landscape.js';
-import { resizeCanvas } from './landscape.js';
-import { drawPath } from './leftButtons.js';
 
 let addedDemo;
 export function showDemo() {
@@ -50,9 +46,7 @@ function tick() {
   requestAnimationFrame(tick);
 }
 function update() {
-  // элементы не вынесены на отдельный GPU-слой, потому что после того, как
-  // для них сработает css-анимация transform, браузер вынесет их на отдельный слой самостоятельно
-  let img1 = document.querySelector('.imgDemo1');
+    let img1 = document.querySelector('.imgDemo1');
   img1.style.transform = `matrix(${scaleX}, 0, 0, ${scaleY},${offsetX},${offsetY})`;
   let img2 = document.querySelector('.imgDemo2');
   img2.style.transform = `matrix(${scaleX}, 0, 0, ${scaleY},${-offsetX},${offsetY})`;

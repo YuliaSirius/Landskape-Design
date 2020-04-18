@@ -1,5 +1,4 @@
-import { canvas } from './landscape.js';
-import { reDraw } from './landscape.js';
+import { canvas, reDraw } from './landscape.js';
 
 export let plot = {
   W: 0,

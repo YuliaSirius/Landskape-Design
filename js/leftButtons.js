@@ -1,9 +1,5 @@
-import { addImage } from './landscape.js';
-import { canvas } from './landscape.js';
-import { plot } from './plotsSizes.js';
-import { getPlot } from './plotsSizes.js';
-import { cnt } from './landscape.js';
-import { reDraw } from './landscape.js';
+import { canvas, cnt, addImage, reDraw } from './landscape.js';
+import { plot, getPlot } from './plotsSizes.js';
 
 export let image = {
   smooth: { quantity: 4, added: false, width: 40, height: 40 },

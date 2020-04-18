@@ -1,15 +1,14 @@
-import { storeInfo } from './ajax.js';
-import { getPlot } from './plotsSizes.js';
-import { drawnObjects } from './landscape.js';
-import { addedObj } from './landscape.js';
-import { reDraw } from './landscape.js';
-import { canvas } from './landscape.js';
-import { removeSelection } from './landscape.js';
-import { plot } from './plotsSizes.js';
-import { ways } from './leftButtons.js';
-import { addedPath } from './leftButtons.js';
+import { storeInfo, restoreInfo } from './ajax.js';
+import { getPlot, plot } from './plotsSizes.js';
+import {
+  canvas,
+  drawnObjects,
+  addedObj,
+  reDraw,
+  removeSelection,
+} from './landscape.js';
+import { ways, addedPath } from './leftButtons.js';
 import { showDemo } from './templates.js';
-import { restoreInfo } from './ajax.js';
 
 export function createTopMenu() {
   let divPaint = document.createElement('div');
@@ -90,7 +89,7 @@ function removeAll() {
   loginWindow.style.display = 'none';
   let login = document.querySelector('.login');
   login.remove();
- }
+}
 
 function savePicture() {
   removeSelection();

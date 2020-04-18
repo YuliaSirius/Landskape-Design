@@ -1,11 +1,8 @@
 'use strict';
-import { drawnObjects } from './landscape.js';
-import { addImage } from './landscape.js';
-import { reDraw } from './landscape.js';
-import { drawPath } from './leftButtons.js';
+import { drawnObjects, reDraw,addImage } from './landscape.js';
+import { drawPath, ways } from './leftButtons.js';
 import { plot } from './plotsSizes.js';
 import { currentUser } from './topButtons.js';
-import { ways } from './leftButtons.js';
 
 let ajaxHandlerScript = 'https://fe.it-academy.by/AjaxStringStorage2.php';
 let updatePassword;

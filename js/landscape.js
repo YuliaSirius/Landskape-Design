@@ -1,12 +1,9 @@
-import { plot } from './plotsSizes.js';
-import { drawPath } from './leftButtons.js';
-import { ways } from './leftButtons.js';
-import { addEventMouseEnter } from './leftButtons.js';
+import { plot, getPlot } from './plotsSizes.js';
+import { drawPath, ways, addEventMouseEnter } from './leftButtons.js';
 import { createTopMenu } from './topButtons.js';
 import { addListener } from './moveButtons.js';
 import { addHtml } from './partOfHtml.js';
 import { restoreInfo } from './ajax.js';
-import { getPlot } from './plotsSizes.js';
 
 export let canvas;
 export let cnt;
@@ -246,7 +243,6 @@ function drawImage(img) {
   img.template.closePath();
   cnt.fill(img.template);
   canvas.addEventListener('mousedown', getObj);
-  canvas.addEventListener('touchstart', touchStart);
 }
 let currObj;
 let topLeft;
@@ -259,57 +255,7 @@ let right;
 let left;
 let rotation;
 export let addedObj;
-let touchShiftX = 0;
-let touchShiftY = 0;
 
-function touchStart(e) {
-  e.preventDefault();
-  let touchInfo = e.targetTouches[0];
-  currObj = null;
-  for (let item of drawnObjects) {
-    if (cnt.isPointInPath(item.template, touchInfo.pageX, touchInfo.pageY)) {
-      currObj = item;
-      touchShiftX = touchInfo.pageX - img.X;
-      touchShiftY = touchInfo.pageY - img.Y;
-    }
-  }
-  cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
-  cnt.strokeStyle = 'rgb(68, 109, 245)';
-  drawSelect(currObj);
-  cnt.fillStyle = 'black';
-  drawSize(currObj);
-  canvas.ontouchmove = touchMove;
-  canvas.ontouchend = touchEnd;
-}
-function touchEnd(e) {
-  e.preventDefault();
-  reDraw();
-  if (currObj) {
-    cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    cnt.strokeStyle = 'rgb(68, 109, 245)';
-    drawSelect(currObj);
-    cnt.fillStyle = 'black';
-    drawSize(currObj);
-  }
-  currObj = null;
-}
-function touchMove(e) {
-  e.preventDefault();
-  if (!currObj) return;
-  let touchInfo = e.targetTouches[0];
-  currObj.Yshare =
-    (touchInfo.pageY - touchShiftY - plot.Y * canvas.height) /
-    (plot.H * plot.scale);
-  currObj.Xshare =
-    (touchInfo.pageX - touchShiftX - plot.X * canvas.width) /
-    (plot.W * plot.scale);
-  reDraw();
-  cnt.fillStyle = 'rgba(255, 255, 255, 0.6)';
-  cnt.strokeStyle = 'rgb(68, 109, 245)';
-  drawSelect(currObj);
-  cnt.fillStyle = 'black';
-  drawSize(currObj);
-}
 export function getObj(e) {
   let x = e.offsetX;
   let y = e.offsetY;
